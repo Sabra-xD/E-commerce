@@ -1,0 +1,51 @@
+html {
+    font-size: 10px;
+}
+
+html,
+body{
+    margin:0;
+    padding:0;
+}
+
+html,
+body,
+#root,
+.App {
+    height: 100%;
+}
+
+
+//The box-sizing:border-box
+//It allows us to include the padding and border within the
+//Element's total width and height.
+//Back then if we had width of 10 px, padding of 2px and border of 1px width
+//Our total width then is 13px
+//But with box-sizing, the width ALWAYS remains 10px.
+//-webkit and -morz makes sure it reads properly for older browsers.
+//The * means it applies to ALL elements.
+*, ::before, ::after{
+-webkit-box-sizing: border-box;
+-moz-box-sizing: border-box;
+box-sizing: border-box;
+}
+
+body {
+    font-family: "Open Sans", sans-serif;
+    font-size: 1.8rem;
+    font-weight: 400;
+    line-height: 1;
+}
+
+a {
+    text-decoration: none;
+}
+a, a:hover {
+    transition: all .4s ease-in-out;
+}
+
+.main{
+ position: relative;
+ top:20%;
+ background-color: black;
+}

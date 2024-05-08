@@ -1,0 +1,44 @@
+:root {
+    --container-height: auto;
+    --input-button-height: 25px; /* Set the default input height */
+    --border-radius:5px;
+  }
+  
+  .form-container {
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+    width: 65%;
+    top: 15%;
+    left: 17.5%;
+    height: var(--container-height);
+    padding: 50px;
+    border: 5px solid rgb(58, 22, 104);
+  }
+  
+  .input {
+    display: block;
+    border-radius: var(--border-radius);
+    margin-top: 10px;
+    margin-bottom: 10px;
+    height: var(--input-button-height); 
+  }
+  
+  .form-button {
+    
+    border-radius: var(--border-radius);
+    background: rgb(41, 11, 81);
+    height: var(--input-button-height); 
+    color: white;
+  
+
+}
+
+
+.divider {
+    border-top: 5px solid solid linear-gradient(to right, 41, 11, 81, #ae00ff);
+    border-radius: var(--border-radius);
+    margin: 10px 0;
+  }

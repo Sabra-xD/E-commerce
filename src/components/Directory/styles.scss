@@ -1,0 +1,76 @@
+.directory{
+  height: 100%;
+  .wrap{
+    display: grid;
+    height: 100%;
+    width: 100%;
+    grid-template-columns: 50% 50%;
+    .item {
+      display:grid;
+      width: 100%;
+      height: 100%;
+      float: left;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+      transition: transform 0.3s ease-in-out;
+      .button{
+        justify-self: center;
+        align-self: center;
+        font-size: 2rem;
+        border-radius: 10px;
+        width: 20%;
+        border: 0;
+        transition: transform 0.3s ease-in-out;
+
+      }
+      .button:hover {
+        transform: scale(1.1);
+    }
+    #female:hover{
+      box-shadow: 0 4px 8px rgba(112, 30, 30, 0.747);
+    }
+
+    #male:hover{
+      box-shadow: 0 4px 8px rgba(60, 47, 173, 0.747);
+    }
+
+    }
+
+    .item:hover{
+      transform: translateY(-10px);
+    }
+
+  }
+
+}
+
+  
+@media only screen and (max-width: 980px) {
+  .directory .wrap {
+    grid-template-rows: auto auto;
+    grid-template-columns: auto;
+
+    .item {
+      width: 100%;
+      height: auto; /* Change height to auto */
+
+      /* Ensure the image covers the full container */
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      
+      .button {
+        font-size: 1.5rem;
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 540){
+  .directory .wrap .item .button{
+    font-size: 1rem;
+  }
+}
+
+

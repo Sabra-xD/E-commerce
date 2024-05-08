@@ -1,23 +1,52 @@
-import logo from './logo.svg';
-import './App.css';
+
+import './default.scss';
+import HomePage from './pages/HomePage';
+import { Routes,Route } from 'react-router-dom';
+import MainLayout from './layouts/MainLayout';
+import Login from './components/Authentication/Login';
+import { readUserInfo } from './rtk/user/userSlice';
+import {useDispatch} from 'react-redux';
+import { useEffect } from 'react';
+import Register from './components/Authentication/Register';
 
 function App() {
+  const dispatch = useDispatch();
+
+
+  useEffect(()=>{
+    console.log("Should read info");
+    dispatch(readUserInfo);
+  },[dispatch]);
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className='App'>
+      <Routes>
+
+        <Route path="/" element={
+  
+            <MainLayout>
+              <HomePage />
+            </MainLayout>
+        }/>
+
+        <Route path="register" element={
+          <MainLayout>
+            <Register />
+          </MainLayout>
+        }/>
+
+
+        <Route path="login" element={
+          <MainLayout>
+            <Login />
+          </MainLayout>
+        }
+      />
+
+      
+      </Routes>
+
     </div>
   );
 }

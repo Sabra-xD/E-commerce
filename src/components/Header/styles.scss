@@ -1,0 +1,38 @@
+
+.header{
+        height: 6.5rem;
+        box-shadow: 0 2px 4px 0 rgba(0,0,0,.1) ;
+
+        .wrap{
+            max-width: 1450px;
+            height: 100%;
+            //Auto centralizes element within the block or container.
+            //Y-axis, x-Axis
+            margin: 0 auto;
+            //  When you set an element's position to relative, it remains in the normal document flow, but you can adjust its position relative to its normal position using the top, right, bottom, and left properties.
+            //Basically means, normally an element is set at 0,0 for example.
+            //Positioning it as relative means we can use top, left and right to move it 
+            //Relative to its original position.
+            position: relative;
+
+            .logo {
+                width: 13.0rem;
+                position: relative;
+                //Move the element from the top, moves the element from the left.
+                top: 50%; left: 10px;
+                //Moves the element along the Y axis
+                transform: translateY(-50%);
+
+                img {
+                    display: block;
+                    width: 100%;
+                    margin: 0;
+                }
+            }
+
+
+
+
+        }
+    }
+
