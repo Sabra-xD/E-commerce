@@ -22,14 +22,21 @@ const Header = () => {
   }, []);
 
 
-  const LoginOutButton = () =>{
+  const UserControlls = () =>{
     return(
       
-      user===null ? ( <Link to="/login">Login</Link>
+      user===null ? ( 
+      <>
+         <Link to="/register">Register</Link>
+         <Link to="/login">Login</Link>
+      </>
       ): (
-        <button onClick={()=>{
-          dispatch(logOut).then(naviate('/'));
-        }}>Log Out</button>
+          <>
+            <Link  to="">My Account</Link>
+            <Link style={{color:"red"}} onClick={()=>{
+              dispatch(logOut).then(naviate('/'));
+            }}>Log Out</Link>
+          </>
       )
       
     )
@@ -43,9 +50,8 @@ const Header = () => {
           <button className="dropbtn">Menu</button>
           <div className="dropdown-content">
           <Link to="/">Home Page</Link>
-          <Link to="/register">Register</Link>
           {
-            LoginOutButton()
+            UserControlls()
           }
           </div>
         </div>
@@ -54,9 +60,8 @@ const Header = () => {
       return (
         <div className="container">
           <Link to="/">Home Page</Link>
-          <Link to="/register">Register</Link>
           {
-            LoginOutButton()
+            UserControlls()
           }
           
         </div>

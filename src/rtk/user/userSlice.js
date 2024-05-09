@@ -14,6 +14,7 @@ export const userSlice = createSlice({
     signInSuccess: false,
     signInError: '',
     signUpError: '',
+    signUpSucess: false,
   },
   reducers: {
     nullifyUser: (state, action) => {
@@ -42,6 +43,9 @@ export const userSlice = createSlice({
     signInError: (state, action) => {
       state.signInError = action.payload;
     },
+    signUpSucess:(state,action)=>{
+      state.signUpSucess = action.payload;
+    },
     signUpError: (state,action) => {
       console.log("Non-Serializable Action?: ",action.payload);
       state.signUpError = action.payload;
@@ -49,8 +53,12 @@ export const userSlice = createSlice({
   },
 });
 
-export const { signInSuccess, signInError, setUser, signUpError } = userSlice.actions;
+export const { signInSuccess, signInError, setUser, signUpError,signUpSucess } = userSlice.actions;
 export default userSlice.reducer;
+export const selectSignInSuccess = (state) => state.user.signInSuccess;
+export const selectSignUpSuccess = (state) => state.user.signUpSucess;
+
+
 
 export const signInWithEmailAndPasswordController = (email, password)=> async(dispatch) =>{
   try {
@@ -66,6 +74,7 @@ export const signInWithEmailAndPasswordController = (email, password)=> async(di
           }
         };
         dispatch(setUser(userData));
+        dispatch(signInSuccess(true));
         dispatch(signInError(''));
       }
     ).catch((err)=>{
@@ -81,6 +90,7 @@ export const signInWithGoogle = async (dispatch) => {
   try {
     const response = await signInWithPopup(auth, GoogleProvider);
     dispatch(signInSuccess(true));
+    dispatch(signUpSucess(true));
     dispatch(setUser(response));
   } catch (error) {
     console.error("Error signing in with Google:", error);
@@ -105,6 +115,8 @@ export const logOut = async (dispatch) => {
     await auth.signOut();
     localStorage.clear();
     dispatch(setUser({ user: null }));
+    dispatch(signInSuccess(false));
+    dispatch(signUpSucess(false));
   } catch (error) {
     console.error("Error in the LogOut: ", error);
   }
@@ -122,18 +134,23 @@ export const createAccount =  (email, password, confirmPass, displayName) => asy
   }
 
   try {
-    const response = await createUserWithEmailAndPassword(auth, email, password);
-    const userData = {
-      user: {
-        displayName: displayName,
-        email: email,
-        photoURL: '',
-        uid: response.user.uid,
-        idToken: response.user.accessToken,
-      }
-    };
-    dispatch(setUser(userData));
-    dispatch(signUpError(''));
+    await createUserWithEmailAndPassword(auth, email, password).then((response)=>{
+      const userData = {
+        user: {
+          displayName: displayName,
+          email: email,
+          photoURL: '',
+          uid: response.user.uid,
+          idToken: response.user.accessToken,
+        }
+      };
+
+      dispatch(setUser(userData));
+      dispatch(signUpError(''));
+      dispatch(signUpSucess(true));
+    
+    });
+  
   } catch (error) {
     console.error("Error creating account:", error);
     dispatch(signUpError(error.code));

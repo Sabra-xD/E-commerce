@@ -1,9 +1,10 @@
 // import { signInWithGoogle } from "../../firebase/utils";
 import { useDispatch, useSelector } from "react-redux";
-import { createAccount} from "../../../rtk/user/userSlice";
+import { createAccount, selectSignUpSuccess} from "../../../rtk/user/userSlice";
 import '../styles.scss';
 import { signInWithGoogle } from "../../../firebase/utils";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 // import {useNavigate } from "react-router-dom";
 
 
@@ -11,11 +12,20 @@ const Register = () => {
     // const navigator = useNavigate();
     const dispatch = useDispatch();
     const signUpError = useSelector(state=>state.user.signUpError);
-
+    const signUpSucess = useSelector(selectSignUpSuccess);
+    const navigator = useNavigate();
     const [email,setEmail] = useState('');
     const [password,setPassword] = useState('');
     const [confirmPass,setConfirmPass] = useState('');
     const [name, setName] = useState('');
+
+
+    useEffect(()=>{
+        if(signUpSucess){
+            navigator('/')
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[signUpSucess]);
 
     const handleNameChange = (event) => {
         setName(event.target.value);

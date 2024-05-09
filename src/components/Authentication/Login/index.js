@@ -1,19 +1,30 @@
 // import { signInWithGoogle } from "../../firebase/utils";
 import { useDispatch, useSelector } from "react-redux";
-import {signInWithEmailAndPasswordController, signInWithGoogle } from "../../../rtk/user/userSlice";
+import {selectSignInSuccess, signInWithEmailAndPasswordController, signInWithGoogle } from "../../../rtk/user/userSlice";
 import '../styles.scss';
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 
 const Login = () => {
 
     const dispatch = useDispatch();
+    const signInSucess = useSelector(selectSignInSuccess);
+    const navigator = useNavigate();
 
     const signInError = useSelector(state=>state.user.signInError);
 
     const [email,setEmail] = useState('');
     const [password,setPassword] = useState('');
+    
+    useEffect(()=>{
+        if(signInSucess){
+            console.log("Navigating to HomePage");
+            navigator('/');
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[signInSucess])
+
 
     const handleInputChange = (event,isEmail) =>{
         if(isEmail){
@@ -70,11 +81,13 @@ const Login = () => {
                 
                 <button className="form-button" onClick={handleSignInWithGoogle}>Sign In With Google</button>
 
+
+                <Link className="link-top" to="/reset-password">Forgot your password? Reset</Link>
+
+                
                 {
                     ErrorMessage()
                 }
-
-                <Link className="link-top" to="/reset-password">Forgot your password? Reset</Link>
 
             </form>
          
