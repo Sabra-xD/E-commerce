@@ -4,6 +4,7 @@ import {
   signInWithPopup,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  sendPasswordResetEmail,
 } from "firebase/auth";
 
 export const userSlice = createSlice({
@@ -109,6 +110,7 @@ export const logOut = async (dispatch) => {
   }
 };
 
+
 export const createAccount =  (email, password, confirmPass, displayName) => async (dispatch) => {
   if(password!==confirmPass){
     dispatch(signUpError("Password mis-match"));
@@ -137,3 +139,17 @@ export const createAccount =  (email, password, confirmPass, displayName) => asy
     dispatch(signUpError(error.code));
   }
 };
+
+
+export const resetPassword = async(email) =>{
+  console.log("Inside the resetPassword Function");
+  try{
+    await sendPasswordResetEmail(auth,email).then((res)=>{
+      console.log("Res",res);
+    }).catch((err)=>{
+      console.log("Error in the resetPassword",err);
+    });
+  }catch(err){
+    console.log("Error in the resetPassword: ",err);
+  }
+}

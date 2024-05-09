@@ -8,6 +8,7 @@ import { readUserInfo } from './rtk/user/userSlice';
 import {useDispatch} from 'react-redux';
 import { useEffect } from 'react';
 import Register from './components/Authentication/Register';
+import ResetPassword from './components/Authentication/ResetPassword';
 
 function App() {
   const dispatch = useDispatch();
@@ -43,6 +44,12 @@ function App() {
           </MainLayout>
         }
       />
+
+      <Route path="reset-password" element={
+        <MainLayout>
+          <ResetPassword />
+        </MainLayout>
+      }/>
 
       
       </Routes>

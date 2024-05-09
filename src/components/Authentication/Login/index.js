@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {signInWithEmailAndPasswordController, signInWithGoogle } from "../../../rtk/user/userSlice";
 import '../styles.scss';
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 
 const Login = () => {
@@ -36,8 +37,6 @@ const Login = () => {
         dispatch(signInWithEmailAndPasswordController(email,password));
     }
 
-
-
     const ErrorMessage = () =>{
         return(
           
@@ -49,9 +48,6 @@ const Login = () => {
           
         )
       }
-
-
-
 
     return(
 
@@ -65,15 +61,21 @@ const Login = () => {
                 <input className="input" placeholder="Password" onChange={(e)=>{
                     handleInputChange(e,false);
                 }}/>
+
                 <button className="form-button" onClick={(e)=>{
                     handleSubmit(e);
                 }}>Login</button>
+                
                 <hr/>
+                
                 <button className="form-button" onClick={handleSignInWithGoogle}>Sign In With Google</button>
 
                 {
                     ErrorMessage()
                 }
+
+                <Link className="link-top" to="/reset-password">Forgot your password? Reset</Link>
+
             </form>
          
     );   
