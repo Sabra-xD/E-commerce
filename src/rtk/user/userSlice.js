@@ -17,19 +17,17 @@ export const userSlice = createSlice({
     signUpSucess: false,
   },
   reducers: {
-    nullifyUser: (state, action) => {
-      state.user = null;
-    },
+
     setUser: (state, action) => {
       if (action.payload.user === null) {
         state.user = null;
       } else {
-        const { displayName, email, photoURL, uid, idToken } = action.payload.user;
-
+        const { displayName, email, photoURL, uid, idToken, userRoles } = action.payload.user;
         const userData = {
           displayName,
           email,
           id: uid,
+          userRoles: userRoles,
           tokenId: idToken,
           photo: photoURL,
         };
@@ -57,6 +55,9 @@ export const { signInSuccess, signInError, setUser, signUpError,signUpSucess } =
 export default userSlice.reducer;
 export const selectSignInSuccess = (state) => state.user.signInSuccess;
 export const selectSignUpSuccess = (state) => state.user.signUpSucess;
+export const selectCurrentUser = (state) => state.user.user;
+
+
 
 
 export const signInWithEmailAndPasswordController =  (email, password) => async (dispatch) => {
@@ -77,6 +78,7 @@ export const signInWithEmailAndPasswordController =  (email, password) => async 
           user: {
             displayName: userInfo.displayName,
             email: userInfo.email,
+            userRoles: userInfo.userRoles,
             photoURL: '',
             uid: userInfo.uid,
             idToken: res.user.accessToken,

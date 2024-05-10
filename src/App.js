@@ -9,6 +9,9 @@ import {useDispatch} from 'react-redux';
 import { useEffect } from 'react';
 import Register from './components/Authentication/Register';
 import ResetPassword from './components/Authentication/ResetPassword';
+import AdminLayOut from './layouts/AdminLayOut';
+import AdminPage from './pages/AdminPage';
+import WithAdminAuth from './hoc/WithAdminAuth';
 
 function App() {
   const dispatch = useDispatch();
@@ -50,6 +53,18 @@ function App() {
           <ResetPassword />
         </MainLayout>
       }/>
+
+
+
+      <Route path="admin" element={
+        //We need to add the WithAuth around it, make sure they have permission.
+        <WithAdminAuth>
+            <AdminLayOut>
+              <AdminPage />
+          </AdminLayOut>
+        </WithAdminAuth>
+     
+      } />
 
       
       </Routes>
