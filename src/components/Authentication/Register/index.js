@@ -2,7 +2,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { createAccount, selectSignUpSuccess} from "../../../rtk/user/userSlice";
 import '../styles.scss';
-import { signInWithGoogle } from "../../../firebase/utils";
+import { signInWithGoogle } from "../../../rtk/user/userSlice";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 // import {useNavigate } from "react-router-dom";

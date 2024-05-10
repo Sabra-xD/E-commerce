@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { auth, GoogleProvider } from "../../firebase/utils";
+import { auth, fetchUserInfo, GoogleProvider, handleUserProfile } from "../../firebase/utils";
 import {
   signInWithPopup,
   createUserWithEmailAndPassword,
@@ -59,32 +59,43 @@ export const selectSignInSuccess = (state) => state.user.signInSuccess;
 export const selectSignUpSuccess = (state) => state.user.signUpSucess;
 
 
-
-export const signInWithEmailAndPasswordController = (email, password)=> async(dispatch) =>{
+export const signInWithEmailAndPasswordController =  (email, password) => async (dispatch) => {
   try {
-    await signInWithEmailAndPassword(auth, email, password).then(
-      (res)=>{
-        const userData = {
+    // Default Authentication in Firebase
+   const res = await signInWithEmailAndPassword(auth, email, password);
+
+    // Fetching userInfo from the fireStore (no dispatch here)
+    const userInfo = await fetchUserInfo(res.user); // Assuming `res` is available from the previous line
+
+    if (!userInfo) {
+      dispatch(signInError('Something went wrong')); // Dispatch error if user info not found
+      return; // Exit if there's an error
+    }
+      //Fetching userInfo from the fireStore.
+        if(userInfo){
+          const userData = {
           user: {
-            displayName: '',
-            email: res.user.email,
+            displayName: userInfo.displayName,
+            email: userInfo.email,
             photoURL: '',
-            uid: res.user.uid,
+            uid: userInfo.uid,
             idToken: res.user.accessToken,
           }
         };
         dispatch(setUser(userData));
         dispatch(signInSuccess(true));
         dispatch(signInError(''));
+      }else{
+        dispatch(signInError('Something went wrong'));
       }
-    ).catch((err)=>{
-      console.log("Error in the sign in with email and password: ",err);
-      dispatch(signInError(err.code));
-    });
-  } catch (error) {
+      }
+
+  catch (error) {
     console.error("Error signing in with Email and Password:", error);
+    dispatch(signInError(error.code || 'An unknown error occurred')); // Dispatch error message
   }
 };
+
 
 export const signInWithGoogle = async (dispatch) => {
   try {
@@ -128,13 +139,14 @@ export const createAccount =  (email, password, confirmPass, displayName) => asy
     dispatch(signUpError("Password mis-match"));
     return;
   }
+
   if(displayName===''){
     dispatch(signUpError("Please set your name"));
     return;
   }
 
   try {
-    await createUserWithEmailAndPassword(auth, email, password).then((response)=>{
+    await createUserWithEmailAndPassword(auth, email, password).then(async (response)=>{
       const userData = {
         user: {
           displayName: displayName,
@@ -144,7 +156,11 @@ export const createAccount =  (email, password, confirmPass, displayName) => asy
           idToken: response.user.accessToken,
         }
       };
-
+    
+      //Saving user to the dataBase.
+      await handleUserProfile(response.user,{displayName});
+      
+      //Setting User State locally.
       dispatch(setUser(userData));
       dispatch(signUpError(''));
       dispatch(signUpSucess(true));
