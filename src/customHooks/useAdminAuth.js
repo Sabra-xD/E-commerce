@@ -1,29 +1,37 @@
-import { useSelector } from "react-redux"
-import { selectCurrentUser, selectSignInSuccess } from "../rtk/user/userSlice"
+import { selectCurrentUser } from "../rtk/user/userSlice"
 import {  useNavigate } from 'react-router-dom';
 import { useEffect } from "react";
 import { checkUserAdmin } from "../Utils/Utils";
+import useSelectorWithDelay from "./useSelectorWithDelay";
 
 //This checks if the user is an admin or not.
-const useAdminAuth =  async()  => {
-   const signInSuccess = useSelector(selectSignInSuccess);
-    const currentUser =   useSelector(state=>state.user.user);
-    console.log("Sign IN Sucess: ",signInSuccess);
+const useAdminAuth =  ()  => {
+
+    const {currentUser,timerExpired} = useSelectorWithDelay(selectCurrentUser,3000);
+
     console.log("curentUser from the selector: ",currentUser);
+    console.log("Timer: ",timerExpired);
+
     const navigator = useNavigate();
 
 
     useEffect(()=>{
-      
-        if(!checkUserAdmin(currentUser)){
-            console.log("User is not an admin");
-            navigator('/');
+        if(currentUser){
+            if(!checkUserAdmin(currentUser)){
+                console.log("User is not an admin");
+                navigator('/');
+            }
+
+        }else{
+
+            if(timerExpired){
+                navigator('/')
+            }
+          
         }
 
-
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[currentUser]);
+    },[currentUser,timerExpired]);
 
     return currentUser;
 }

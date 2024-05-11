@@ -12,6 +12,7 @@ import ResetPassword from './components/Authentication/ResetPassword';
 import AdminLayOut from './layouts/AdminLayOut';
 import AdminPage from './pages/AdminPage';
 import WithAdminAuth from './hoc/WithAdminAuth';
+import CurrentUser from './components/CurrentUser/currentuser';
 
 function App() {
   const dispatch = useDispatch();
@@ -66,6 +67,9 @@ function App() {
      
       } />
 
+      <Route  path="current" element={
+        <CurrentUser />
+      }/>
       
       </Routes>
 

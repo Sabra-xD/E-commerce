@@ -41,11 +41,11 @@ const Login = () => {
         // ToDO: Naviagte to home page once done.
     }
 
-    const handleSubmit = (e)=>{
+    const handleSubmit = async (e)=>{
         e.preventDefault();
         console.log("The final email value is: ", email);
         console.log("The final password value is: ",password);
-        dispatch(signInWithEmailAndPasswordController(email,password));
+         dispatch(signInWithEmailAndPasswordController({email,password}));
     }
 
     const ErrorMessage = () =>{

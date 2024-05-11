@@ -9,8 +9,15 @@ import { useNavigate } from 'react-router-dom';
 const Header = () => {
   const naviate = useNavigate();
   const dispatch = useDispatch();
-  const user = useSelector(state=>state.user.user);
+  
+  const user = useSelector(state=>state.user?.user);
 
+  const [currentUser,setCurrentUser] = useState('');
+
+  const [loading,setisLoading] = useState(true);
+
+
+ 
   const [isMobile, setIsMobile] = useState(false);
   useEffect(() => {
     const handleResize = () => {
@@ -21,24 +28,63 @@ const Header = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  useEffect(()=>{
+  
+    console.log("loading: ",loading);
+
+    if(user){
+      console.log("The user is correct: ",user);
+      setisLoading(false);
+    }else{
+      setisLoading(true);
+    }
+
+    console.log("loading after the if user: ",loading);
+
+
+    if(!loading){
+      setCurrentUser(user?.displayName);
+      console.log("The current user inside the useEffect: ",currentUser);
+    }
+
+  });
 
   const UserControlls = () =>{
+    console.log("The user value inside the UserControlls: ",user);
     return(
-      
+
       user===null ? ( 
-      <>
-         <Link to="/register">Register</Link>
-         <Link to="/login">Login</Link>
-      </>
-      ): (
-          <>
-            <Link  to="">My Account</Link>
-            <Link style={{color:"red"}} onClick={()=>{
-              dispatch(logOut).then(naviate('/'));
-            }}>Log Out</Link>
-          </>
-      )
+        <>
+           <Link to="/register">Register</Link>
+           <Link to="/login">Login</Link>
+        </>
+        ): (
+            <>
+              <Link  to="">My Account</Link>
+              <Link style={{color:"red"}} onClick={()=>{
+                dispatch(logOut).then(naviate('/'));
+              }}>Log Out</Link>
+            </>
+        )
       
+    //   loading ? (
+    //     <p>Loading....</p>
+    //   ) : ( user===null ? ( 
+    //     <>
+    //        <Link to="/register">Register</Link>
+    //        <Link to="/login">Login</Link>
+    //     </>
+    //     ): (
+    //         <>
+    //           <Link  to="">My Account</Link>
+    //           <Link style={{color:"red"}} onClick={()=>{
+    //             dispatch(logOut).then(naviate('/'));
+    //           }}>Log Out</Link>
+    //         </>
+    //     ))
+      
+    // )
+
     )
   }
 

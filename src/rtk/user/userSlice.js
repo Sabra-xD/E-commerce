@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { auth, fetchUserInfo, GoogleProvider, handleUserProfile } from "../../firebase/utils";
 import {
   signInWithPopup,
@@ -34,6 +34,9 @@ export const userSlice = createSlice({
         saveUserInfo(userData);
         state.user = userData;
       }
+
+      console.log("User inside the setUser: ",action.payload.user);
+
     },
     signInSuccess: (state, action) => {
       state.signInSuccess = action.payload;
@@ -55,48 +58,92 @@ export const { signInSuccess, signInError, setUser, signUpError,signUpSucess } =
 export default userSlice.reducer;
 export const selectSignInSuccess = (state) => state.user.signInSuccess;
 export const selectSignUpSuccess = (state) => state.user.signUpSucess;
-export const selectCurrentUser = (state) => state.user.user;
-
-
-
-
-export const signInWithEmailAndPasswordController =  (email, password) => async (dispatch) => {
-  try {
-    // Default Authentication in Firebase
-   const res = await signInWithEmailAndPassword(auth, email, password);
-
-    // Fetching userInfo from the fireStore (no dispatch here)
-    const userInfo = await fetchUserInfo(res.user); // Assuming `res` is available from the previous line
-
-    if (!userInfo) {
-      dispatch(signInError('Something went wrong')); // Dispatch error if user info not found
-      return; // Exit if there's an error
-    }
-      //Fetching userInfo from the fireStore.
-        if(userInfo){
-          const userData = {
-          user: {
-            displayName: userInfo.displayName,
-            email: userInfo.email,
-            userRoles: userInfo.userRoles,
-            photoURL: '',
-            uid: userInfo.uid,
-            idToken: res.user.accessToken,
-          }
-        };
-        dispatch(setUser(userData));
-        dispatch(signInSuccess(true));
-        dispatch(signInError(''));
-      }else{
-        dispatch(signInError('Something went wrong'));
-      }
-      }
-
-  catch (error) {
-    console.error("Error signing in with Email and Password:", error);
-    dispatch(signInError(error.code || 'An unknown error occurred')); // Dispatch error message
-  }
+export const selectCurrentUser = (state) => {
+  console.log("The user state inside the selectCurrentUser: ",state.user.user);
+  return state.user.user
 };
+
+
+
+export const signInWithEmailAndPasswordController = createAsyncThunk(
+  'auth/signIn',
+  async ({ email, password }, { dispatch }) => {
+    try {
+      // Default Authentication in Firebase
+      const res = await signInWithEmailAndPassword(auth, email, password);
+
+      // Fetching userInfo from the fireStore (no dispatch here)
+      const userInfo = await fetchUserInfo(res.user); // Assuming `res` is available from the previous line
+
+      if (!userInfo) {
+        dispatch(signInError('Something went wrong'));
+        return false;
+      }
+
+      // Fetching userInfo from the fireStore.
+      console.log("User info inside the signIn: ", userInfo);
+      const userData = {
+        user: {
+          displayName: userInfo.displayName,
+          email: userInfo.email,
+          userRoles: userInfo.userRoles,
+          photoURL: '',
+          uid: userInfo.uid,
+          idToken: res.user.accessToken,
+        }
+      };
+
+      dispatch(setUser(userData));
+      dispatch(signInSuccess(true));
+      return true;
+    } catch (error) {
+      console.error("Error signing in with Email and Password:", error);
+      dispatch(signInError(error.code || 'An unknown error occurred'));
+      throw error;
+    }
+  }
+);
+
+
+// export const signInWithEmailAndPasswordController =  (email, password) => async (dispatch) => {
+//   try {
+//     // Default Authentication in Firebase
+//    const res = await signInWithEmailAndPassword(auth, email, password);
+
+//     // Fetching userInfo from the fireStore (no dispatch here)
+//     const userInfo = await fetchUserInfo(res.user); // Assuming `res` is available from the previous line
+
+//     if (!userInfo) {
+//       dispatch(signInError('Something went wrong')); // Dispatch error if user info not found
+//       return;
+//     }
+//       //Fetching userInfo from the fireStore.
+//         if(userInfo){
+//           console.log("User info inside the signIN: ",userInfo);
+//           const userData = {
+//           user: {
+//             displayName: userInfo.displayName,
+//             email: userInfo.email,
+//             userRoles: userInfo.userRoles,
+//             photoURL: '',
+//             uid: userInfo.uid,
+//             idToken: res.user.accessToken,
+//           }
+//         };
+
+//         dispatch(setUser(userData));
+//         dispatch(signInSuccess(true));
+//         dispatch(signInError(''));
+//       }else{
+//         dispatch(signInError('Something went wrong'));
+//       }
+//       }
+
+//   catch (error) {
+//     console.error("Error signing in with Email and Password:", error);
+//     dispatch(signInError(error.code || 'An unknown error occurred')); // Dispatch error message
+//   }
+// };
 
 
 export const signInWithGoogle = async (dispatch) => {
@@ -111,6 +158,7 @@ export const signInWithGoogle = async (dispatch) => {
 };
 
 const saveUserInfo = (userData) => {
+  console.log("The user data we're saving: ",userData);
   localStorage.setItem("userData", JSON.stringify(userData));
 };
 
