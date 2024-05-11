@@ -13,6 +13,7 @@ import AdminLayOut from './layouts/AdminLayOut';
 import AdminPage from './pages/AdminPage';
 import WithAdminAuth from './hoc/WithAdminAuth';
 import CurrentUser from './components/CurrentUser/currentuser';
+import AdminToolbar from './components/AdminToolbar';
 
 function App() {
   const dispatch = useDispatch();
@@ -26,6 +27,8 @@ function App() {
 
   return (
     <div className='App'>
+
+      <AdminToolbar />
       <Routes>
 
         <Route path="/" element={
