@@ -1,5 +1,4 @@
-import { useEffect } from "react";
-import { useSelector } from "react-redux";
+
 import useSelectorWithDelay from "../../customHooks/useSelectorWithDelay";
 import { useNavigate } from "react-router-dom";
 

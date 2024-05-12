@@ -14,6 +14,7 @@ import AdminPage from './pages/AdminPage';
 import WithAdminAuth from './hoc/WithAdminAuth';
 import CurrentUser from './components/CurrentUser/currentuser';
 import AdminToolbar from './components/AdminToolbar';
+import Admin from './components/Admin';
 
 function App() {
   const dispatch = useDispatch();
@@ -52,6 +53,8 @@ function App() {
         }
       />
 
+      
+
       <Route path="reset-password" element={
         <MainLayout>
           <ResetPassword />
@@ -64,7 +67,7 @@ function App() {
         //We need to add the WithAuth around it, make sure they have permission.
         <WithAdminAuth>
             <AdminLayOut>
-              <AdminPage />
+              <Admin />
           </AdminLayOut>
         </WithAdminAuth>
      

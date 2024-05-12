@@ -1,0 +1,34 @@
+
+
+.divider{
+    width: 100%;
+}
+
+.NavBarDiv {
+    display: flex; /* Change display to flex */
+    justify-content: center;
+    height: 100%; /* Ensure the container takes up full height */
+    h3 {
+        /* Remove margin from <h3> elements */
+        margin: 0;
+    }
+    
+    /* Adjust styling for the anchor tag */
+    a {
+        color: #391616; /* Blue color */
+        text-decoration: none; /* Remove underline */
+        transition: color 0.3s; /* Smooth color transition on hover */
+        margin: 0; /* Remove any default margins */
+    }
+
+    &:hover {
+        background-color: #d3d3d3;
+    }
+}
+
+
+.wrapper{
+    display: flex;
+    justify-content: center;
+    align-content: center;
+}

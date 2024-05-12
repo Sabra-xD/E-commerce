@@ -1,0 +1,30 @@
+
+.admin {
+    height: 100%;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 25% 75%;
+    .NavBarContainer{
+        display:flex;
+        height:100%;
+        width:auto;
+        // padding: 20px;
+        flex-direction: column;
+        // align-content: center;     
+        align-content: right;   
+        border-right: 2px solid rgba(47, 40, 40, 0.344);
+        
+    }
+
+    
+
+    .AddProductContainer {
+        display:grid;
+        grid-template-rows: 10% 90%;
+        padding: 10px;
+    }
+
+
+    
+
+}

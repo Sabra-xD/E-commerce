@@ -2,6 +2,7 @@ import { initializeApp } from 'firebase/app';
 import { getAuth, GoogleAuthProvider } from 'firebase/auth';
 import { getFirestore, collection, doc, getDocs,addDoc,query, where } from 'firebase/firestore';
 import { firebaseConfig } from './config.js';
+import { productSlice } from '../rtk/products/productSlice.js';
 
 
 const firebaseApp = initializeApp(firebaseConfig);
@@ -71,5 +72,14 @@ if (querySnapshot.size > 0) { // Check if there are any documents
   }
 };
 
+
+
+// export const handleAddProduct = product => {
+
+//   return new Promise((resolve,reject)=>{
+
+//   })
+
+// }
 
 
