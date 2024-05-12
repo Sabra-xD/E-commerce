@@ -1,9 +1,9 @@
 
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import AdminNavBar from "../AdminNavBar.js";
 import AddProduct from "./AddNewProduct/AddProduct.js";
 import "./styles.scss";
-import { fetchProductsController, getAllProducts } from "../../rtk/products/productSlice.js";
+import {getAllProducts } from "../../rtk/products/productSlice.js";
 import { useEffect } from "react";
 const Admin = () => {
     const productsList = useSelector(getAllProducts);

@@ -168,7 +168,9 @@ export const readUserInfo = (dispatch) => {
 
   if (userData) {
     dispatch(setUser({ user: userData }));
+    return true;
   }
+  return false;
 };
 
 export const logOut = async (dispatch) => {

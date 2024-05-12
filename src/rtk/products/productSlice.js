@@ -42,7 +42,10 @@ export const fetchProductsController = (user) => async(dispatch) => {
             await handleFetchProducts().then(
                 (products) =>{
                     console.log("The products are inside the fetch Controller: ",products);
-                    dispatch(getProducts(products))
+                    dispatch(getProducts(products));
+                    
+                    //Save products locally:
+                    dispatch(saveProducts(products));
                 }
             ).catch((error)=>{
                 console.log("Error in the products controller promise: ",error);
@@ -53,3 +56,18 @@ export const fetchProductsController = (user) => async(dispatch) => {
         console.log("Error in the fetchProductsController");
     }
 }
+
+const saveProducts = (products) => {
+    console.log("The products we're saving", products);
+    const productsJSON = JSON.stringify(products);
+    localStorage.setItem("products", productsJSON);
+};
+
+
+
+  export const readProducts = (dispatch) => {
+    const productsJSON = localStorage.getItem("products");
+    const products = JSON.parse(productsJSON);
+    dispatch(getProducts(products));
+  };
+  

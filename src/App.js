@@ -10,11 +10,11 @@ import { useEffect } from 'react';
 import Register from './components/Authentication/Register';
 import ResetPassword from './components/Authentication/ResetPassword';
 import AdminLayOut from './layouts/AdminLayOut';
-import AdminPage from './pages/AdminPage';
 import WithAdminAuth from './hoc/WithAdminAuth';
 import CurrentUser from './components/CurrentUser/currentuser';
 import AdminToolbar from './components/AdminToolbar';
 import Admin from './components/Admin';
+import { readProducts } from './rtk/products/productSlice';
 
 function App() {
   const dispatch = useDispatch();
@@ -22,7 +22,9 @@ function App() {
 
   useEffect(()=>{
     console.log("Should read info");
-    dispatch(readUserInfo);
+    if(dispatch(readUserInfo)){
+      dispatch(readProducts);
+    }
   },[dispatch]);
 
 
