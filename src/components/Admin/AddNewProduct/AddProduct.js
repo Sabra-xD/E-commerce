@@ -1,12 +1,22 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './styles.scss';
+// import { handleAddProduct, handleFetchProducts} from '../../../firebase/utils';
+import { fetchProductsController, getAllProducts } from '../../../rtk/products/productSlice';
+import { useDispatch, useSelector } from 'react-redux';
 
 const AddProduct = () => {
 
     const [showForm, setShowForm] = useState(false);
+    const productsList = useSelector(getAllProducts);
+
+
+    const dispatch = useDispatch()
 
     const handleButtonClick = () => {
       setShowForm(true);
+      // handleAddProduct({name:"whatever"});
+      // handleFetchProducts();
+      dispatch(fetchProductsController());
     };
   
     const handleCancelClick = () => {
@@ -17,6 +27,13 @@ const AddProduct = () => {
       // Handle form submission
       setShowForm(false);
     };
+
+    useEffect(()=>{
+      //Get products from firebase and updating it to the database. Most likely, we'll remove it and continue with the state.
+      console.log("The get all products from the add prodct button: ",productsList);
+    },[productsList]);
+
+
 
     return(
         <>

@@ -2,7 +2,6 @@ import { initializeApp } from 'firebase/app';
 import { getAuth, GoogleAuthProvider } from 'firebase/auth';
 import { getFirestore, collection, doc, getDocs,addDoc,query, where } from 'firebase/firestore';
 import { firebaseConfig } from './config.js';
-import { productSlice } from '../rtk/products/productSlice.js';
 
 
 const firebaseApp = initializeApp(firebaseConfig);
@@ -74,12 +73,38 @@ if (querySnapshot.size > 0) { // Check if there are any documents
 
 
 
-// export const handleAddProduct = product => {
+export const handleAddProduct =  (product) =>{
 
-//   return new Promise((resolve,reject)=>{
+  product = {
+    name:"new product",
+    price: 69,
+  }
 
-//   })
+  return new Promise( async(resolve,reject)=>{
+    //To add the product to firestore.
+    await addDoc(collection(firestore,"products"),product).then(()=>{
+      resolve()
+    }).catch(
+      err => {
+        reject(err);
+      }
+    )
+  })
+}
 
-// }
 
 
+export const handleFetchProducts = () => {
+  return new Promise((resolve, reject) => {
+    const q = query(collection(firestore, "products"));
+    
+    getDocs(q)
+      .then((productsSnapshot) => {
+        const products = productsSnapshot.docs.map((doc) => doc.data());
+        resolve(products); 
+      })
+      .catch((error) => {
+        reject(error); // Rejecting the Promise if there's an error
+      });
+  });
+};
