@@ -77,7 +77,7 @@ const Admin = () => {
                                                                 {productName}
                                                             </td>
                                                             <td>
-                                                                £{productPrice}
+                                                                {productPrice}$
                                                             </td>
                                                             <td>
                                                                 <Button onClick={() => handleDelete(documentID)}>
