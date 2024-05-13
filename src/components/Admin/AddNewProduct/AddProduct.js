@@ -1,60 +1,94 @@
-import { useEffect, useState } from 'react';
+import {useState } from 'react';
 import './styles.scss';
-// import { handleAddProduct, handleFetchProducts} from '../../../firebase/utils';
-import { fetchProductsController, getAllProducts } from '../../../rtk/products/productSlice';
+import { addProductController} from '../../../rtk/products/productSlice';
 import { useDispatch, useSelector } from 'react-redux';
+import { selectCurrentUser } from '../../../rtk/user/userSlice';
+import FormInput from '../../Form/FormInput';
+import FormSelect from '../../Form/FormSelect';
 
 const AddProduct = () => {
 
     const [showForm, setShowForm] = useState(false);
-    const productsList = useSelector(getAllProducts);
+    const user = useSelector(selectCurrentUser);
 
 
     const dispatch = useDispatch()
 
     const handleButtonClick = () => {
+
+      //Open the form
       setShowForm(true);
-      // handleAddProduct({name:"whatever"});
-      // handleFetchProducts();
-      dispatch(fetchProductsController());
+
+
     };
   
     const handleCancelClick = () => {
+
       setShowForm(false);
-    };
-  
-    const handleOKClick = () => {
-      // Handle form submission
-      setShowForm(false);
+      
     };
 
-    useEffect(()=>{
-      //Get products from firebase and updating it to the database. Most likely, we'll remove it and continue with the state.
-      console.log("The get all products from the add prodct button: ",productsList);
-    },[productsList]);
+    const [product, setProduct] = useState({
+      productName: '',
+      productPhoto:'',
+      productPrice:'',
+    });
+  
+
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setProduct(prevProduct => ({
+        ...prevProduct,
+        [name]: value
+      }));
+    };
+    
+    const isProductEmpty = () => {
+      return Object.values(product).some(value => value === '');
+    };
+
+    const handleOKClick = () => {
+      // Handle form submission
+      if(!isProductEmpty()){
+        console.log("The product is: ",product);
+        
+        dispatch(addProductController(product,user));
+        setShowForm(false);
+      }else{
+        console.log("The product is empty: ",product);
+        //We need to throw an error here.
+      }
+    };
+
 
 
 
     return(
         <>
-              
-
       <button className="button-styling" onClick={handleButtonClick}>Add New product</button>
       {showForm && (
         <div className="form-overlay">
           <div className="form">
             <h2>Add a New Product</h2>
 
-            <select>
-                <option value="">Select Gender</option>
-                <option value="male">Male</option>
-                <option value="female">Female</option>
-            </select>
+            <FormSelect
+              label="Category"
+              options={[{
+                value: "mens",
+                name: "Mens"
+              }, {
+                value: "womens",
+                name: "Womens"
+              }]}
+              // handleChange={e => setProductCategory(e.target.value)}
+            />
+
             <label>Product Name</label>
-            <input placeholder='Enter product name'/>
-            <input placeholder='amount'/>
-            <input placeholder='Enter product name'/>
-            <input type="number" placeholder='Price'/>
+            <FormInput placeholder='Enter product name' onChange={handleChange} name='productName'/>
+            <label>Price</label>
+            <FormInput type="number" placeholder='Price' name='productPrice' onChange={handleChange}/>
+            <label>Photo URL</label>
+            <FormInput placeholder='Photo URL' name="productPhoto" onChange={handleChange}/>
 
             
 

@@ -1,6 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth, GoogleAuthProvider } from 'firebase/auth';
-import { getFirestore, collection, doc, getDocs,addDoc,query, where } from 'firebase/firestore';
+import { getFirestore, collection, doc, getDocs,addDoc,query, where, deleteDoc } from 'firebase/firestore';
 import { firebaseConfig } from './config.js';
 
 
@@ -75,11 +75,6 @@ if (querySnapshot.size > 0) { // Check if there are any documents
 
 export const handleAddProduct =  (product) =>{
 
-  product = {
-    name:"new product",
-    price: 69,
-  }
-
   return new Promise( async(resolve,reject)=>{
     //To add the product to firestore.
     await addDoc(collection(firestore,"products"),product).then(()=>{
@@ -93,18 +88,39 @@ export const handleAddProduct =  (product) =>{
 }
 
 
-
 export const handleFetchProducts = () => {
   return new Promise((resolve, reject) => {
-    const q = query(collection(firestore, "products"));
-    
-    getDocs(q)
+      const q = query(collection(firestore, "products"));
+
+      getDocs(q)
       .then((productsSnapshot) => {
-        const products = productsSnapshot.docs.map((doc) => doc.data());
-        resolve(products); 
+        const products = productsSnapshot.docs.map((doc) => {
+          // Access and print the document ID here
+          console.log("Document ID:", doc.id);
+
+          // Return the document data along with the ID if needed
+          return { ...doc.data(), documentID: doc.id };
+        });
+
+        resolve(products); // Resolve with the enriched products array
       })
       .catch((error) => {
         reject(error); // Rejecting the Promise if there's an error
       });
   });
+
+};
+
+
+
+export const deleteProduct = async (documentId) => {
+  try {
+    const productRef = doc(collection(firestore, 'products'), documentId);
+    await deleteDoc(productRef);
+    console.log(`Document with ID ${documentId} deleted successfully`);
+    return true
+  } catch (error) {
+    console.error("Error deleting document:", error);
+    return false;
+  }
 };

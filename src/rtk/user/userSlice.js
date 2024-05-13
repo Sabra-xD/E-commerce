@@ -23,10 +23,11 @@ export const userSlice = createSlice({
         state.user = null;
       } else {
         const { displayName, email, photoURL, uid, idToken, userRoles } = action.payload.user;
+        console.log("The uid overtime: ",uid);
         const userData = {
           displayName,
           email,
-          id: uid,
+          uid: uid,
           userRoles: userRoles,
           tokenId: idToken,
           photo: photoURL,
@@ -165,6 +166,8 @@ const saveUserInfo = (userData) => {
 export const readUserInfo = (dispatch) => {
   const userDataString = localStorage.getItem("userData");
   const userData = JSON.parse(userDataString);
+
+  console.log("The read userData: ",userData);
 
   if (userData) {
     dispatch(setUser({ user: userData }));
