@@ -3,6 +3,7 @@ import { selectCurrentUser } from "../../rtk/user/userSlice";
 import { Link } from "react-router-dom";
 
 import "../Admin/styles.scss";
+import Button from "../Form/Button";
 
 
 const AdminNavBar = () => {
@@ -34,7 +35,7 @@ const AdminNavBar = () => {
 
             
             <div style={{"display":"flex","justifyContent":"center",}}>
-            <button>Sign Out</button>
+            <Button style={{"margin":"0 5px"}}>Sign Out</Button>
 
             </div>
 

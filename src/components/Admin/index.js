@@ -24,7 +24,6 @@ const Admin = () => {
     },[]);
 
     const handleDelete = (documentID) => {
-        console.log("The documentID is: ", documentID);
         dispatch(deleteProductController(user, documentID))
             .then(() => {
                 setShowAlert(true); // Show alert after successful deletion
@@ -46,7 +45,9 @@ const Admin = () => {
                 </div>
                 <div className="AddProductContainer">
                     <AddProduct />
+
                     <div className="manageProducts">
+
                         <table border="0" cellPadding="0" cellSpacing="0">
                             <tbody>
                                 <tr>
