@@ -36,6 +36,7 @@ const Header = () => {
         </>
         ): (
             <>
+              <Link to="/search">Search</Link>
               <Link  to="">My Account</Link>
               <Link style={{color:"red"}} onClick={()=>{
                 dispatch(logOut).then(naviate('/'));
@@ -47,7 +48,6 @@ const Header = () => {
 
     )
   }
-
 
   const renderNavigation = () => {
     if (isMobile) {
@@ -65,7 +65,12 @@ const Header = () => {
     } else {
       return (
         <div className="container">
+
+{
+          
+          }
           <Link to="/">Home Page</Link>
+         
           {
             UserControlls()
           }
@@ -81,6 +86,7 @@ const Header = () => {
         <div className="logo">
           <img src={Logo} alt="SimpleTut Logo" />
         </div>
+     
         {renderNavigation()}
       </div>
     </header>
