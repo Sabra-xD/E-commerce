@@ -23,7 +23,6 @@ export const userSlice = createSlice({
         state.user = null;
       } else {
         const { displayName, email, photoURL, uid, idToken, userRoles } = action.payload.user;
-        console.log("The uid overtime: ",uid);
         const userData = {
           displayName,
           email,
@@ -35,9 +34,6 @@ export const userSlice = createSlice({
         saveUserInfo(userData);
         state.user = userData;
       }
-
-      console.log("User inside the setUser: ",action.payload.user);
-
     },
     signInSuccess: (state, action) => {
       state.signInSuccess = action.payload;
@@ -60,7 +56,6 @@ export default userSlice.reducer;
 export const selectSignInSuccess = (state) => state.user.signInSuccess;
 export const selectSignUpSuccess = (state) => state.user.signUpSucess;
 export const selectCurrentUser = (state) => {
-  console.log("The user state inside the selectCurrentUser: ",state.user.user);
   return state.user.user
 };
 
@@ -82,7 +77,6 @@ export const signInWithEmailAndPasswordController = createAsyncThunk(
       }
 
       // Fetching userInfo from the fireStore.
-      console.log("User info inside the signIn: ", userInfo);
       const userData = {
         user: {
           displayName: userInfo.displayName,
@@ -159,7 +153,6 @@ export const signInWithGoogle = async (dispatch) => {
 };
 
 const saveUserInfo = (userData) => {
-  console.log("The user data we're saving: ",userData);
   localStorage.setItem("userData", JSON.stringify(userData));
 };
 
@@ -167,7 +160,6 @@ export const readUserInfo = (dispatch) => {
   const userDataString = localStorage.getItem("userData");
   const userData = JSON.parse(userDataString);
 
-  console.log("The read userData: ",userData);
 
   if (userData) {
     dispatch(setUser({ user: userData }));
@@ -233,7 +225,6 @@ export const resetPassword = async(email) =>{
   console.log("Inside the resetPassword Function");
   try{
     await sendPasswordResetEmail(auth,email).then((res)=>{
-      console.log("Res",res);
     }).catch((err)=>{
       console.log("Error in the resetPassword",err);
     });

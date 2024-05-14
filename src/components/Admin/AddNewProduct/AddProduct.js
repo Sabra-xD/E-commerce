@@ -1,97 +1,85 @@
-import {useState } from 'react';
+import { useEffect, useState } from 'react';
 import './styles.scss';
-import { addProductController} from '../../../rtk/products/productSlice';
+import { addProductController } from '../../../rtk/products/productSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectCurrentUser } from '../../../rtk/user/userSlice';
 import FormInput from '../../Form/FormInput';
 import FormSelect from '../../Form/FormSelect';
 
 const AddProduct = () => {
+  const [showForm, setShowForm] = useState(false);
+  const user = useSelector(selectCurrentUser);
+  const dispatch = useDispatch();
 
-    const [showForm, setShowForm] = useState(false);
-    const user = useSelector(selectCurrentUser);
+  const [productCategory, setProductCategory] = useState('mens');
 
+  const [product, setProduct] = useState({
+    productName: '',
+    productPhoto: '',
+    productPrice: '',
+    productCategory: 'mens',
+  });
 
-    const dispatch = useDispatch()
+  const handleButtonClick = () => {
+    setShowForm(true); // Open the form
+  };
 
-    const handleButtonClick = () => {
+  const handleCancelClick = () => {
+    setShowForm(false);
+  };
 
-      //Open the form
-      setShowForm(true);
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setProduct(prevProduct => ({
+      ...prevProduct,
+      [name]: value
+    }));
+  };
 
-
-    };
-  
-    const handleCancelClick = () => {
-
+  const handleOKClick = () => {
+    // Handle form submission
+    if (!isProductEmpty()) {
+      dispatch(addProductController(product, user));
+      setProductCategory('mens'); // Reset category to default
       setShowForm(false);
-      
-    };
+    } else {
+      console.log("The product is empty: ", product);
+      // Throw an error or handle empty product case
+    }
+  };
 
-    const [product, setProduct] = useState({
-      productName: '',
-      productPhoto:'',
-      productPrice:'',
-    });
-  
+  const isProductEmpty = () => {
+    return Object.values(product).some(value => value === '');
+  };
 
-    const handleChange = (e) => {
-      const { name, value } = e.target;
-      setProduct(prevProduct => ({
-        ...prevProduct,
-        [name]: value
-      }));
-    };
-    
-    const isProductEmpty = () => {
-      return Object.values(product).some(value => value === '');
-    };
+  useEffect(() => {
+    setProduct(prevProduct => ({
+      ...prevProduct,
+      productCategory: productCategory
+    }));
+  }, [productCategory]);
 
-    const handleOKClick = () => {
-      // Handle form submission
-      if(!isProductEmpty()){
-        console.log("The product is: ",product);
-        
-        dispatch(addProductController(product,user));
-        setShowForm(false);
-      }else{
-        console.log("The product is empty: ",product);
-        //We need to throw an error here.
-      }
-    };
-
-
-
-
-    return(
-        <>
+  return (
+    <>
       <button className="button-styling" onClick={handleButtonClick}>Add New product</button>
       {showForm && (
         <div className="form-overlay">
           <div className="form">
             <h2>Add a New Product</h2>
-
             <FormSelect
               label="Category"
-              options={[{
-                value: "mens",
-                name: "Mens"
-              }, {
-                value: "womens",
-                name: "Womens"
-              }]}
-              // handleChange={e => setProductCategory(e.target.value)}
+              options={[
+                { value: "mens", name: "Mens" },
+                { value: "womens", name: "Womens" }
+              ]}
+              handleChange={e => setProductCategory(e.target.value)}
             />
-
             <label>Product Name</label>
-            <FormInput placeholder='Enter product name' onChange={handleChange} name='productName'/>
+            <FormInput placeholder='Enter product name' onChange={handleChange} name='productName' />
             <label>Price</label>
-            <FormInput type="number" placeholder='Price' name='productPrice' onChange={handleChange}/>
+            <FormInput type="number" placeholder='Price' name='productPrice' onChange={handleChange} />
             <label>Photo URL</label>
-            <FormInput placeholder='Photo URL' name="productPhoto" onChange={handleChange}/>
-
-            
-
+            <FormInput placeholder='Photo URL' name="productPhoto" onChange={handleChange} />
             <div className="button-container">
               <button className="cancel-button" onClick={handleCancelClick}>Cancel</button>
               <button className="ok-button" onClick={handleOKClick}>OK</button>
@@ -99,8 +87,8 @@ const AddProduct = () => {
           </div>
         </div>
       )}
-       </>
-    );
+    </>
+  );
 }
 
 export default AddProduct;

@@ -9,8 +9,7 @@ const useAdminAuth =  ()  => {
 
     const {currentUser,timerExpired} = useSelectorWithDelay(selectCurrentUser,3000);
 
-    console.log("curentUser from the selector: ",currentUser);
-    console.log("Timer: ",timerExpired);
+
 
     const navigator = useNavigate();
 
@@ -18,7 +17,6 @@ const useAdminAuth =  ()  => {
     useEffect(()=>{
         if(currentUser){
             if(!checkUserAdmin(currentUser)){
-                console.log("User is not an admin");
                 navigator('/');
             }
 
