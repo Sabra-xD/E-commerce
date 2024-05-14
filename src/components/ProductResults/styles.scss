@@ -1,0 +1,42 @@
+.ProductCard {
+    width: 100%;
+    height: 30rem;
+    border-radius: 10px;
+}
+
+.ProductCard img {
+    width: 100%;
+    height: 60%;
+}
+
+.productsList {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    column-gap: 10px;
+    row-gap: 30px;
+}
+
+.wrapper {
+    margin: 0 20px;
+}
+
+/* Style every even .ProductCard */
+.ProductCard:nth-child(even) {
+    background-color: lightgrey;
+}
+
+/* Media query for viewport width up to 980px */
+@media screen and (max-width: 800px) {
+    .productsList {
+        grid-template-columns: repeat(1, 1fr); /* Change to a single column */
+    }
+
+    .ProductCard {
+        height: 50rem;
+        width: 80%; /* Each ProductCard takes up 80% of the screen width */
+        margin: auto; /* Center the ProductCard */
+        img{
+            height: 75%;
+        }
+    }
+}

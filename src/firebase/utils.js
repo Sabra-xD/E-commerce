@@ -87,29 +87,38 @@ export const handleAddProduct =  (product) =>{
   })
 }
 
+  export const handleFetchProducts = async (filterType) => {
+    try {
+      const ref = collection(firestore, "products");
+      let q;
+      if(filterType){
+        console.log("The filterType is: ",filterType);
+        q = query(ref, where('productCategory', '==', filterType));
+      }else{
+        q = query(ref);
+      }
+      const productsSnapshot = await getDocs(q);
 
-export const handleFetchProducts = () => {
-  return new Promise((resolve, reject) => {
-      const q = query(collection(firestore, "products"));
+      const products = productsSnapshot.docs.map((doc) => {
+        // Access and print the document ID here (optional for logging)
+        console.log("Document ID:", doc.id);
 
-      getDocs(q)
-      .then((productsSnapshot) => {
-        const products = productsSnapshot.docs.map((doc) => {
-          // Access and print the document ID here
-          console.log("Document ID:", doc.id);
+        const productData = doc.data(); // Destructure doc.data() for clarity
 
-          // Return the document data along with the ID if needed
-          return { ...doc.data(), documentID: doc.id };
-        });
-
-        resolve(products); // Resolve with the enriched products array
-      })
-      .catch((error) => {
-        reject(error); // Rejecting the Promise if there's an error
+        // Return enriched product data, including optional documentID
+        return {
+          ...productData,
+          documentID: doc.id, // Include documentID if needed
+        };
       });
-  });
 
-};
+      return products; // Resolve with the enriched products array
+    } catch (error) {
+      console.error("Error fetching products:", error); // Use console.error for more detailed logging
+      throw error; // Re-throw the error to allow upper-level handling
+    }
+  };
+
 
 
 

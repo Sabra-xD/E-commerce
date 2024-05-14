@@ -15,6 +15,7 @@ import CurrentUser from './components/CurrentUser/currentuser';
 import AdminToolbar from './components/AdminToolbar';
 import Admin from './components/Admin';
 import { readProducts } from './rtk/products/productSlice';
+import SearchPage from './pages/SearchPage';
 
 function App() {
   const dispatch = useDispatch();
@@ -55,7 +56,21 @@ function App() {
         }
       />
 
-      
+      <Route path="search" element={
+        <MainLayout>
+          <SearchPage />
+        </MainLayout>
+      }/>
+
+
+<Route path="search/:filterTypeFromLink" element={
+        <MainLayout>
+          <SearchPage />
+        </MainLayout>
+      }/>
+
+
+
 
       <Route path="reset-password" element={
         <MainLayout>

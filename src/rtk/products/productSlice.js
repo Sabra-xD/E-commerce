@@ -33,11 +33,11 @@ export const getAllProducts = (state) => state.product?.products;
 
 
 
-export const fetchProductsController = (user) => async(dispatch) => {
+export const fetchProductsController = (user,filterType) => async(dispatch) => {
     try{
-
+        console.log("The filter type is: ",filterType);
         if(user?.uid){
-            await handleFetchProducts().then(
+            await handleFetchProducts(filterType).then(
                 (products) =>{
                     dispatch(getProducts(products));
                     
@@ -84,7 +84,7 @@ export const deleteProductController = (user,productID) => async(dispatch) => {
         }else{
             console.log("Status was False");
         }
-        
+
     }catch(error){  
         console.log("The delete product controller: ",error);
     }
