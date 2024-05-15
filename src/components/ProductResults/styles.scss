@@ -6,12 +6,13 @@
 
 .ProductCard img {
     width: 100%;
-    height: 60%;
+    height: 50%;
 }
 
 .productsList {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: 25% 25% 25%;
+    justify-content: center;
     column-gap: 10px;
     row-gap: 30px;
 }

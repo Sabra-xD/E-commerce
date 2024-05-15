@@ -6,7 +6,7 @@
     grid-template-columns: 25% 75%;
     .NavBarContainer{
         display:flex;
-        height:100%;
+        height:110%;
         width:auto;
         // padding: 20px;
         flex-direction: column;
@@ -20,7 +20,7 @@
 
     .AddProductContainer {
         display:grid;
-        grid-template-rows: 10% 90%;
+        grid-template-rows: 10% 100%;
         padding: 5px;
     }
 

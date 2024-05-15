@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import Button from "../../Form/Button";
 import '../styles.scss'
 
@@ -9,9 +10,12 @@ const Product = ({
     documentID,
 }) => {
 
-
+    const navigator = useNavigate();
     return(
-        <div className="ProductCard">
+        <div className="ProductCard" onClick={()=>{
+            //Navigate to the product-details page
+            navigator(`/product-details/${documentID}`);
+        }}>
             <img src={productPhoto} alt="productPhoto" />
             <p>{productName}</p>
             <p>{productPrice}$</p>

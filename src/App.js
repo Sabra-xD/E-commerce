@@ -16,6 +16,7 @@ import AdminToolbar from './components/AdminToolbar';
 import Admin from './components/Admin';
 import { readProducts } from './rtk/products/productSlice';
 import SearchPage from './pages/SearchPage';
+import ProductDetails from './components/ProductDetails';
 
 function App() {
   const dispatch = useDispatch();
@@ -77,6 +78,13 @@ function App() {
           <ResetPassword />
         </MainLayout>
       }/>
+
+
+      <Route path="product-details/:documentID" element = {
+        <MainLayout>
+          <ProductDetails />
+        </MainLayout>
+      } />
 
 
 

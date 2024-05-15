@@ -5,6 +5,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { selectCurrentUser } from '../../../rtk/user/userSlice';
 import FormInput from '../../Form/FormInput';
 import FormSelect from '../../Form/FormSelect';
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 const AddProduct = () => {
   const [showForm, setShowForm] = useState(false);
@@ -18,6 +20,7 @@ const AddProduct = () => {
     productPhoto: '',
     productPrice: '',
     productCategory: 'mens',
+    productDescription: '',
   });
 
   const handleButtonClick = () => {
@@ -80,6 +83,18 @@ const AddProduct = () => {
             <FormInput type="number" placeholder='Price' name='productPrice' onChange={handleChange} />
             <label>Photo URL</label>
             <FormInput placeholder='Photo URL' name="productPhoto" onChange={handleChange} />
+            <label>Description</label>
+            <CKEditor
+              editor={ClassicEditor} // Use ClassicEditor build
+              data={product.productDescription} // Set initial data for CKEditor
+              onChange={(event, editor) => {
+                const data = editor.getData();
+                setProduct(prevProduct => ({
+                  ...prevProduct,
+                  productDescription: data
+                }));
+              }}
+            />
             <div className="button-container">
               <button className="cancel-button" onClick={handleCancelClick}>Cancel</button>
               <button className="ok-button" onClick={handleOKClick}>OK</button>

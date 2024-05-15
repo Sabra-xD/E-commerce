@@ -1,10 +1,22 @@
 .footer {
-    position: fixed; 
-    height: 50px; 
+    position: fixed;
+    height: auto; /* Change height to auto */
+    min-height: 50px; /* Set a minimum height */
     width: 100%;
-    background-color: #f0f0f0; 
-    border-top: 1px solid #ccc; 
-    bottom: 0; 
+    background-color: #f0f0f0;
+    border-top: 1px solid #ccc;
+    bottom: 0;
     left: 0;
-    z-index: 1000; 
-}
+    z-index: 1000;
+  }
+  
+  .wrap {
+    padding: 10px;
+  }
+  
+  /* Optional: Adjust text alignment */
+  .footer h3 {
+    margin: 0;
+    text-align: center;
+  }
+  

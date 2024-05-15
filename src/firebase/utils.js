@@ -1,6 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth, GoogleAuthProvider } from 'firebase/auth';
-import { getFirestore, collection, doc, getDocs,addDoc,query, where, deleteDoc, startAfter, limit } from 'firebase/firestore';
+import { getFirestore, collection, doc, getDocs,addDoc,query, where, deleteDoc, startAfter, limit, getDoc } from 'firebase/firestore';
 import { firebaseConfig } from './config.js';
 
 
@@ -129,6 +129,30 @@ export const handleAddProduct =  (product) =>{
   // };
 
 
+  export const handleFetchProductWithID = async (documentID) => {
+
+    try {
+      // Reference the document directly using doc
+      const productRef = doc(firestore, "products", documentID);
+  
+      // Get a document snapshot
+      const productSnapShot = await getDoc(productRef);
+  
+      if (productSnapShot.exists) {
+        // Document found, get data
+        const product = productSnapShot.data();
+        console.log("The product fetched with the ID is: ", product);
+        return product;
+      } else {
+        // Document not found, handle the case (optional)
+        console.log("No product found with ID:", documentID);
+        return null; // Or throw an error if needed
+      }
+  
+    } catch (error) {
+      console.error("Error in handleFetchProductWithID:", error);
+    }
+  };
   
   
   export const handleFetchProducts = async ({ filterType, StartDoc, presistProduct = [] }) => {

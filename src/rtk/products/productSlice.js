@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { deleteProduct, handleAddProduct, handleFetchProducts } from "../../firebase/utils";
+import { deleteProduct, handleAddProduct, handleFetchProductWithID, handleFetchProducts } from "../../firebase/utils";
 
 
 
@@ -13,6 +13,13 @@ export const productSlice = createSlice({
         isLastPage: false,
     },
     reducers: {
+       
+        setProduct:(state,action)=>{
+            //Setting the product data when fetching it by ID.
+            console.log("The action.payload is: ",action.payload);
+                state.product = action.payload;
+        },
+
         addProduct:(state,action) => {
             //Adding a product to the list.
             // console.log("The state products: ",state.products,"The state product we are pushing: ",action.payload);
@@ -28,11 +35,33 @@ export const productSlice = createSlice({
 });
 
 
-export const  {addProduct,getProducts} = productSlice.actions;
+export const  {addProduct,getProducts,setProduct} = productSlice.actions;
 export default productSlice.reducer;
 
 export const getAllProducts = (state) => state.product?.products;
+export const getProduct = (state) => state.product?.product;
 
+
+
+export const fetchProductWithID = (user,documentID) => async(dispatch) => {
+
+    try{
+
+        if(user?.uid){
+            console.log("Inside the if condition")
+            //The payload sohuld be the documentID
+            const product = await handleFetchProductWithID(documentID);
+            console.log("The returned product: ",product);
+            //Set the state with that product
+            dispatch(setProduct(product));
+        }
+
+    }catch(error){
+        console.log("Error in the fetchProductWithID: ",error);
+    }
+
+
+}
 
 
 // export const fetchProductsController = (user,payload) => async(dispatch) => {
@@ -66,7 +95,9 @@ export const fetchProductsController = (user, payload) => async (dispatch) => {
             console.log("The products we got back inside the fetch: ", products);
             // const { data } = products;
             // console.log("The data we got back inside the fetchProductController: ", data)
+
             dispatch(getProducts({products}));
+
             // Save products locally:
             dispatch(saveProducts({products}));
           })
@@ -75,7 +106,6 @@ export const fetchProductsController = (user, payload) => async (dispatch) => {
             // Handle the error here if needed
           });
       }
-  
     } catch (error) {
       console.log("Error in the fetchProductsController", error);
     }
