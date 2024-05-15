@@ -7,17 +7,19 @@ import { deleteProductController, fetchProductsController, getAllProducts } from
 import { selectCurrentUser } from "../../rtk/user/userSlice.js";
 import Button from "../Form/Button/index.js";
 import Alert from '../Alert/index.js'; 
+import LoadMore from '../LoadMore/LoadMore.js';
 
 const Admin = () => {
     const [showAlert, setShowAlert] = useState(false);
-    const productsList = useSelector(getAllProducts);
+    const products = useSelector(getAllProducts);
+    const { data, queryDoc, isLastPage } = products;
     const user = useSelector(selectCurrentUser);
     const dispatch = useDispatch();
 
     useEffect(() => {
 
 
-        dispatch(fetchProductsController(user));
+        dispatch(fetchProductsController(user,{filterType:''}));
 
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -30,6 +32,7 @@ const Admin = () => {
                 setTimeout(() => {
                     setShowAlert(false); // Hide alert after 1 second
                 }, 1000);
+                dispatch(fetchProductsController(user,{filterType:''}));
             })
             .catch((error) => {
                 console.log("Error deleting product:", error);
@@ -37,68 +40,88 @@ const Admin = () => {
             });
     };
 
+    const handleLoadMore = () => {
+        //Include the start query and presistent data.
+        //We send the current data, since Start Doc is supposdly fetching new data.
+        console.log("Dispatched HandleLoadMore")
+        dispatch(fetchProductsController(user,{filterType:'',StartDoc:queryDoc,presistProduct:data}));
+      }
+
+      const configLoadMore= {
+        onLoadMoreEvt: handleLoadMore,
+      }
+
     return (
-        <>
-            <div className="admin">
+        
+            <>
+              <div className="admin">
                 <div className="NavBarContainer">
-                    <AdminNavBar />
+                  <AdminNavBar />
                 </div>
                 <div className="AddProductContainer">
-                    <AddProduct />
+                  <AddProduct />
+          
+                  <div className="manageProducts">
+          
+                    <table border="0" cellPadding="0" cellSpacing="0">
+                      <tbody>
+                        <tr>
+                          <th>
+                            <h1>Manage Products</h1>
+                          </th>
+                        </tr>
+                        <tr>
+                          <td>
+                            <table className="results" border="0" cellPadding="10" cellSpacing="0">
+                              <tbody>
+                                {Array.isArray(data) && data.length > 0 && data.map((product, index) => {
+                                  const {
+                                    productName,
+                                    productPhoto,
+                                    productPrice,
+                                    // Use this when deleting the product.
+                                    documentID,
+                                  } = product;
+          
+                                  return (
+                                    <tr key={index}>
+                                      <td>
+                                        <img className="thumb" src={productPhoto != null ? productPhoto : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT4Uo5uXtLNFsZFnlojvsKu_lYbG0S3r_m3RkFMX7JpJA&s"} alt="Product Thumbnail" />
+                                      </td>
+                                      <td>
+                                        {productName}
+                                      </td>
+                                      <td>
+                                        {productPrice}$
+                                      </td>
+                                      <td>
+                                        <Button onClick={() => handleDelete(documentID)}>
+                                          DELETE
+                                        </Button>
+                                      </td>
+                                    </tr>
+                                  );
+                                })}
+                              </tbody>
+                            </table>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                          {isLastPage ? null :  <LoadMore {...configLoadMore}/>}
 
-                    <div className="manageProducts">
-
-                        <table border="0" cellPadding="0" cellSpacing="0">
-                            <tbody>
-                                <tr>
-                                    <th>
-                                        <h1>Manage Products</h1>
-                                    </th>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <table className="results" border="0" cellPadding="10" cellSpacing="0">
-                                            <tbody>
-                                                {Array.isArray(productsList) && productsList.length > 0 && productsList.map((product, index) => {
-                                                    const {
-                                                        productName,
-                                                        productPhoto,
-                                                        productPrice,
-                                                        //Use this when deleting the product.
-                                                        documentID,
-                                                    } = product;
-
-                                                    return (
-                                                        <tr key={index}>
-                                                            <td>
-                                                                <img className="thumb" src={productPhoto != null ? productPhoto : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT4Uo5uXtLNFsZFnlojvsKu_lYbG0S3r_m3RkFMX7JpJA&s"} alt="Product Thumbnail" />
-                                                            </td>
-                                                            <td>
-                                                                {productName}
-                                                            </td>
-                                                            <td>
-                                                                {productPrice}$
-                                                            </td>
-                                                            <td>
-                                                                <Button onClick={() => handleDelete(documentID)}>
-                                                                    DELETE
-                                                                </Button>
-                                                            </td>
-                                                        </tr>
-                                                    );
-                                                })}
-                                            </tbody>
-                                        </table>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        {showAlert && <Alert message="Product deleted successfully!" />}
-                    </div>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    {showAlert && <Alert message="Product deleted successfully!" />}
+                  </div>
                 </div>
-            </div>
-        </>
-    )
+              </div>
+            </>
+          );
+       
+    
 }
 
 export default Admin;

@@ -11,21 +11,25 @@ const Directory = props => {
   const user = useSelector(selectCurrentUser);
   useEffect(()=>{
     console.log("The user we're sending back: ",user);
-    dispatch(fetchProductsController(user));
-
+    dispatch(fetchProductsController(user,{filterType:''}));
   // eslint-disable-next-line react-hooks/exhaustive-deps
   },[user])
     return (
       <div className="directory">
+        
         <div className="wrap">
+
           <div
             className="item"
             style={{
               backgroundImage: `url(${ShopWomen})`
             }}
           >
+
             <button className="button" id='female'>Shop Women</button>
+
           </div>
+
           <div
             className="item"
             style={{

@@ -15,11 +15,13 @@ export const productSlice = createSlice({
     reducers: {
         addProduct:(state,action) => {
             //Adding a product to the list.
-            state.products.push(action.payload);
-            saveProducts(state.products);
+            // console.log("The state products: ",state.products,"The state product we are pushing: ",action.payload);
+            // state.products.push(action.payload);
+            // saveProducts(state.products);
         },
         getProducts: (state,action) => {
-            state.products = action.payload;
+            state.products = action.payload['products'];
+            // console.log("The action.payload is: ",action.payload, "The product is: ",action.payload['products']);
         }
     }
 
@@ -33,26 +35,52 @@ export const getAllProducts = (state) => state.product?.products;
 
 
 
-export const fetchProductsController = (user,filterType) => async(dispatch) => {
-    try{
-        console.log("The filter type is: ",filterType);
-        if(user?.uid){
-            await handleFetchProducts(filterType).then(
-                (products) =>{
-                    dispatch(getProducts(products));
-                    
-                    //Save products locally:
-                    dispatch(saveProducts(products));
-                }
-            ).catch((error)=>{
-                console.log("Error in the products controller promise: ",error);
-            });
-        }
-      
-    }catch(error){
-        console.log("Error in the fetchProductsController");
+// export const fetchProductsController = (user,payload) => async(dispatch) => {
+//     try{
+//         console.log("The payload is: ",payload);
+//         console.log("The user is: ",user);
+//         if(user?.uid){
+//             console.log("Inside the if condition");
+//        const products = await handleFetchProducts(payload);
+//        console.log("The products we got back insie the fetch: ",products);
+//        const {data} = products;
+//         console.log("The data we got back inside the fetchProductController: ",data)
+//         dispatch(getProducts(data));
+//         //Save products locally:
+//         dispatch(saveProducts(data));
+//         }
+        
+//     }catch(error){
+//         console.log("Error in the fetchProductsController", error);
+//     }
+// }
+
+export const fetchProductsController = (user, payload) => async (dispatch) => {
+    try {
+      console.log("The payload is: ", payload);
+      console.log("The user is: ", user);
+      if (user?.uid) {
+        console.log("Inside the if condition");
+        handleFetchProducts(payload)
+          .then(products => {
+            console.log("The products we got back inside the fetch: ", products);
+            // const { data } = products;
+            // console.log("The data we got back inside the fetchProductController: ", data)
+            dispatch(getProducts({products}));
+            // Save products locally:
+            dispatch(saveProducts({products}));
+          })
+          .catch(error => {
+            console.log("Error in fetching products:", error);
+            // Handle the error here if needed
+          });
+      }
+  
+    } catch (error) {
+      console.log("Error in the fetchProductsController", error);
     }
-}
+  }
+  
 
 
 export const addProductController = (product,user) => async(dispatch) => {
@@ -63,7 +91,7 @@ export const addProductController = (product,user) => async(dispatch) => {
                 dispatch(addProduct(product));
                 
                 //Refetching the products.
-                dispatch(fetchProductsController(user));
+                dispatch(fetchProductsController(user,{filterType:''}));
             }
         ).catch(err=>{
             console.log("The error in handleAddProduct: ",err);
@@ -80,7 +108,7 @@ export const deleteProductController = (user,productID) => async(dispatch) => {
 
         const status = await deleteProduct(productID);
         if(status){
-            dispatch(fetchProductsController(user));
+            dispatch(fetchProductsController(user,{filterType:''}));
         }else{
             console.log("Status was False");
         }

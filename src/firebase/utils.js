@@ -1,6 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth, GoogleAuthProvider } from 'firebase/auth';
-import { getFirestore, collection, doc, getDocs,addDoc,query, where, deleteDoc } from 'firebase/firestore';
+import { getFirestore, collection, doc, getDocs,addDoc,query, where, deleteDoc, startAfter, limit } from 'firebase/firestore';
 import { firebaseConfig } from './config.js';
 
 
@@ -87,38 +87,92 @@ export const handleAddProduct =  (product) =>{
   })
 }
 
-  export const handleFetchProducts = async (filterType) => {
-    try {
-      const ref = collection(firestore, "products");
-      let q;
-      if(filterType){
-        console.log("The filterType is: ",filterType);
-        q = query(ref, where('productCategory', '==', filterType));
-      }else{
-        q = query(ref);
+  // export const handleFetchProducts = async ({filterType,StartDoc,presistProduct=[]}) => {
+  //   try {
+  //     const pageSize = 6;
+  //     const ref = collection(firestore, "products");
+
+  //     const filterQuery = filterType ? where('productCategory', '==', filterType) : null;
+  //     const StartDocQuery = StartDoc ? startAfter(StartDoc) : null;
+  //     const q = query(ref,filterQuery,limit(pageSize));
+      
+
+  //    await getDocs(q).then((snapShot=>{
+  //       const totalCount = snapShot.size;
+  //       const data = [
+  //         ...presistProduct,
+  //         ...snapShot.docs.map(doc=>{
+  //           return{
+  //             ...doc.data(),
+  //             documentID: doc.id,
+            
+  //           }
+  //         })
+  //       ];
+        
+  //       console.log("The product list: ",data,"queryDoc: ",snapShot.docs[totalCount-1],"Total Count: ",totalCount);
+
+  //       return({
+  //         data,
+  //         queryDoc: snapShot.docs[totalCount - 1],
+  //         isLastPage: totalCount < 1
+  //       });
+
+    
+  //     })); 
+    
+      
+  //  } catch (error) {
+  //     console.error("Error fetching products:", error); // Use console.error for more detailed logging
+  //     throw error; // Re-throw the error to allow upper-level handling
+  //   }
+  // };
+
+
+  
+  
+  export const handleFetchProducts = async ({ filterType, StartDoc, presistProduct = [] }) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const pageSize = 6;
+        const ref = collection(firestore, "products");
+  
+        const filterQuery = filterType ? where('productCategory', '==', filterType) : null;
+        let q;
+        if(StartDoc){
+          const StartDocQuery = startAfter(StartDoc);
+         q = query(ref, filterQuery, StartDocQuery,limit(pageSize));
+
+        }else{
+          q = query(ref, filterQuery, limit(pageSize));
+        }
+  
+        const snapShot = await getDocs(q);
+        const totalCount = snapShot.size;
+        const data = [
+          ...presistProduct,
+          ...snapShot.docs.map(doc => {
+            return {
+              ...doc.data(),
+              documentID: doc.id,
+            }
+          })
+        ];
+  
+        console.log("The product list: ", data, "queryDoc: ", snapShot.docs[totalCount - 1], "Total Count: ", totalCount);
+  
+        resolve({
+          data,
+          queryDoc: snapShot.docs[totalCount - 1],
+          isLastPage: totalCount < 1
+        });
+      } catch (error) {
+        console.error("Error fetching products:", error);
+        reject(error);
       }
-      const productsSnapshot = await getDocs(q);
-
-      const products = productsSnapshot.docs.map((doc) => {
-        // Access and print the document ID here (optional for logging)
-        console.log("Document ID:", doc.id);
-
-        const productData = doc.data(); // Destructure doc.data() for clarity
-
-        // Return enriched product data, including optional documentID
-        return {
-          ...productData,
-          documentID: doc.id, // Include documentID if needed
-        };
-      });
-
-      return products; // Resolve with the enriched products array
-    } catch (error) {
-      console.error("Error fetching products:", error); // Use console.error for more detailed logging
-      throw error; // Re-throw the error to allow upper-level handling
-    }
+    });
   };
-
+  
 
 
 

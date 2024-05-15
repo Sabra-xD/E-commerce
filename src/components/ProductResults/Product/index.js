@@ -13,8 +13,8 @@ const Product = ({
     return(
         <div className="ProductCard">
             <img src={productPhoto} alt="productPhoto" />
-            <h4>{productName}</h4>
-            <h5>{productPrice}$</h5>
+            <p>{productName}</p>
+            <p>{productPrice}$</p>
             <Button style={{"marginTop":"5px"}}>Add to Cart</Button>
         </div>
     

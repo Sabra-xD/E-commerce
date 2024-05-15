@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Product from './Product';
 import FormSelect from '../Form/FormSelect';
+import LoadMore from '../LoadMore/LoadMore';
 // import { useParams } from 'react-router-dom';
 
 
@@ -21,11 +22,12 @@ const ProductResults = () => {
     const [filterType, setFilterType] = useState('');
 
 
-    //We've got this, we need to somehow filter it.
+    //This only returns the data.
+    const products = useSelector(getAllProducts);
 
-    const productsList = useSelector(getAllProducts);
+    const { data, queryDoc, isLastPage } = products;
 
-
+    console.log("Products: ",products);
     const handleFilter = (e) => {
         // navigator(`/search/${nextFilter}`);
         setFilterType(e.target.value);
@@ -33,23 +35,21 @@ const ProductResults = () => {
     
 
     useEffect(() => {
-
-        dispatch(fetchProductsController(user,filterType));
+        console.log("The user before we dispatch it: ",user);
+        if(user) dispatch(fetchProductsController(user,{filterType:filterType}));
+        console.log("The user we are supposdly sending: ",user);
 
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[filterType]);
+    },[filterType,user]);
 
-    // useEffect(()=>{
-    //     if(filterTypeFromLink){
-    //         console.log("From the params: ",filterTypeFromLink);
-    //     setFilterType(filterTypeFromLink);
-    // }
-    
-    // },[]);
 
-    if (!Array.isArray(productsList)) return null;
-    if (productsList.length < 1) {
+    useEffect(()=>{
+      console.log("The data we received in teh useEFfect is: ",data);
+    },[data]);
+
+    if (!Array.isArray(data)) return null;
+    if (data.length < 1) {
 
       return (
         <div className="products">
@@ -77,6 +77,16 @@ const ProductResults = () => {
         handleChange: handleFilter
       };
 
+      const handleLoadMore = () => {
+        //Include the start query and presistent data.
+        //We send the current data, since Start Doc is supposdly fetching new data.
+        dispatch(fetchProductsController(user,{filterType:filterType,StartDoc:queryDoc,presistProduct:data}));
+      }
+
+      const configLoadMore= {
+        onLoadMoreEvt: handleLoadMore,
+      }
+
     return(
 
         <div className="wrapper">
@@ -90,14 +100,25 @@ const ProductResults = () => {
 
                 }
                 <div className="productsList">
-                {Array.isArray(productsList) && productsList.length > 0 && productsList.map((product, index) => {
+                {Array.isArray(data) && data.length > 0 && data.map((product, index) => {
                                                     
 
                     return(
                             <Product {...product} key={index}/>
                           )
                     })}
+
+
                 </div>
+                <div style={{"height":"50px"}}>
+
+                </div>
+                {isLastPage ? null :  <LoadMore {...configLoadMore}/>}
+               
+                <div style={{"height":"20px"}}>
+
+</div>
+
          
         </div>
     )
