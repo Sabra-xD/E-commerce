@@ -3,11 +3,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchProductWithID, getProduct, setProduct } from "../../rtk/products/productSlice";
 import { selectCurrentUser } from "../../rtk/user/userSlice";
 import { useParams } from "react-router-dom";
-import Button from "../Form/Button";
 
 import './styles.scss';
+import CartButton from "../CartButton/CartButton";
 
-
+//Don't forget to cleam that product passing bit in Cart Button.
 
 const ProductDetails = () => {
     const dispatch = useDispatch();
@@ -16,7 +16,6 @@ const ProductDetails = () => {
     const {documentID} = useParams();
     
     const { productDescription,productPrice, productName, productPhoto} = product;
-
     console.log("The documentID we got from the params is: ",documentID);
     useEffect(()=>{
        if(user) dispatch(fetchProductWithID(user,documentID));
@@ -42,7 +41,11 @@ const ProductDetails = () => {
             <h4>{productName}</h4>
             <h5>{productPrice}$</h5>
             </div>
-            <Button>Add to Cart</Button>
+            <CartButton product={{productName,
+                                 productPhoto,
+                               productPrice,
+                               documentID}
+                                          }/>
             <span 
             dangerouslySetInnerHTML={{__html:productDescription}}
             />

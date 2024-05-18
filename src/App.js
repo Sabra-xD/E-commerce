@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 
 import './default.scss';
 import HomePage from './pages/HomePage';
@@ -17,6 +18,7 @@ import Admin from './components/Admin';
 import { readProducts } from './rtk/products/productSlice';
 import SearchPage from './pages/SearchPage';
 import ProductDetails from './components/ProductDetails';
+import { readCartList } from './rtk/cart/cartSlice';
 
 function App() {
   const dispatch = useDispatch();
@@ -26,8 +28,9 @@ function App() {
     console.log("Should read info");
     if(dispatch(readUserInfo)){
       dispatch(readProducts);
+      dispatch(readCartList)
     }
-  },[dispatch]);
+  },[]);
 
 
   return (

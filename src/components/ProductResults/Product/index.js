@@ -1,6 +1,10 @@
 import { useNavigate } from "react-router-dom";
-import Button from "../../Form/Button";
-import '../styles.scss'
+// import Button from "../../Form/Button";
+// import '../styles.scss'
+// import { useDispatch, useSelector } from "react-redux";
+// import { addToCartController, checkIfExist, getCartList } from "../../../rtk/cart/cartSlice";
+// import { useEffect, useState } from "react";
+import CartButton from "../../CartButton/CartButton";
 
 const Product = ({
     productName,
@@ -11,6 +15,17 @@ const Product = ({
 }) => {
 
     const navigator = useNavigate();
+    // const cartList = useSelector(getCartList);
+    // const dispatch = useDispatch();
+    // const [exsists,setExists] = useState(false);
+    const product = {
+        productName,
+         productPhoto,
+    productPrice,
+    documentID
+    }
+
+
     return(
         <div className="ProductCard" onClick={()=>{
             //Navigate to the product-details page
@@ -19,7 +34,8 @@ const Product = ({
             <img src={productPhoto} alt="productPhoto" />
             <p>{productName}</p>
             <p>{productPrice}$</p>
-            <Button style={{"marginTop":"5px"}}>Add to Cart</Button>
+            
+            <CartButton product={product}/>
         </div>
     
     )
