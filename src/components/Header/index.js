@@ -5,15 +5,15 @@ import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { logOut } from '../../rtk/user/userSlice';
 import { useNavigate } from 'react-router-dom';
+import { getCartCount } from '../../rtk/cart/cartSlice';
 
 const Header = () => {
   const naviate = useNavigate();
   const dispatch = useDispatch();
   
   const user = useSelector(state=>state.user?.user);
+  const cartCount = useSelector(getCartCount);
 
-
- 
   const [isMobile, setIsMobile] = useState(false);
   useEffect(() => {
     const handleResize = () => {
@@ -37,6 +37,8 @@ const Header = () => {
         ): (
             <>
               <Link to="/search">Search</Link>
+              
+              <Link to="">Your Cart: ({cartCount})</Link>
               <Link  to="">My Account</Link>
               <Link style={{color:"red"}} onClick={()=>{
                 dispatch(logOut).then(naviate('/'));

@@ -16,7 +16,6 @@ const ProductDetails = () => {
     const {documentID} = useParams();
     
     const { productDescription,productPrice, productName, productPhoto} = product;
-    console.log("The documentID we got from the params is: ",documentID);
     useEffect(()=>{
        if(user) dispatch(fetchProductWithID(user,documentID));
 
@@ -29,7 +28,6 @@ const ProductDetails = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     },[user]);
 
-    console.log("The product we got from the useSelector: ",product);
 
     return(
         //Display the product here.

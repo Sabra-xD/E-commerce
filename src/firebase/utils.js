@@ -21,14 +21,11 @@ export const handleUserProfile = async (userAuth, additionalData) => {
   const { uid } = userAuth;
 
   // Using collectionRef.doc() for Firestore v9+
-  console.log("UserAuth: ",uid);
-  console.log("The uid is: ",uid);
+
   const userRef = doc(collection(firestore, "users"), uid); // Specify the collection name
   
-  console.log("The userRef: ",userRef);
 
   const querySnapshot = await getDocs(collection(firestore, "users"),uid);
-  console.log("Query snapshot: ",querySnapshot);
   // const snapshot = await userRef.get();
 
   const { displayName, email } = userAuth;
@@ -61,7 +58,6 @@ export const fetchUserInfo = async (userAuth) => {
     const querySnapshot = await getDocs(q);
 if (querySnapshot.size > 0) { // Check if there are any documents
   const firstDocData = querySnapshot.docs[0].data();
-  console.log("First Document Data:", firstDocData);
   return firstDocData;
 } else {
   console.log("User not found with the provided uid.");
@@ -141,11 +137,9 @@ export const handleAddProduct =  (product) =>{
       if (productSnapShot.exists) {
         // Document found, get data
         const product = productSnapShot.data();
-        console.log("The product fetched with the ID is: ", product);
         return product;
       } else {
         // Document not found, handle the case (optional)
-        console.log("No product found with ID:", documentID);
         return null; // Or throw an error if needed
       }
   
@@ -183,7 +177,6 @@ export const handleAddProduct =  (product) =>{
           })
         ];
   
-        console.log("The product list: ", data, "queryDoc: ", snapShot.docs[totalCount - 1], "Total Count: ", totalCount);
   
         resolve({
           data,
@@ -204,7 +197,6 @@ export const deleteProduct = async (documentId) => {
   try {
     const productRef = doc(collection(firestore, 'products'), documentId);
     await deleteDoc(productRef);
-    console.log(`Document with ID ${documentId} deleted successfully`);
     return true
   } catch (error) {
     console.error("Error deleting document:", error);

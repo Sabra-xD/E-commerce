@@ -10,7 +10,6 @@ const Directory = props => {
   const dispatch = useDispatch();
   const user = useSelector(selectCurrentUser);
   useEffect(()=>{
-    console.log("The user we're sending back: ",user);
     dispatch(fetchProductsController(user,{filterType:''}));
   // eslint-disable-next-line react-hooks/exhaustive-deps
   },[user])

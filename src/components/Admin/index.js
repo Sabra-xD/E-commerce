@@ -43,7 +43,6 @@ const Admin = () => {
     const handleLoadMore = () => {
         //Include the start query and presistent data.
         //We send the current data, since Start Doc is supposdly fetching new data.
-        console.log("Dispatched HandleLoadMore")
         dispatch(fetchProductsController(user,{filterType:'',StartDoc:queryDoc,presistProduct:data}));
       }
 

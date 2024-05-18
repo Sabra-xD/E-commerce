@@ -27,7 +27,6 @@ const ProductResults = () => {
 
     const { data, queryDoc, isLastPage } = products;
 
-    console.log("Products: ",products);
     const handleFilter = (e) => {
         // navigator(`/search/${nextFilter}`);
         setFilterType(e.target.value);
@@ -35,9 +34,7 @@ const ProductResults = () => {
     
 
     useEffect(() => {
-        console.log("The user before we dispatch it: ",user);
         if(user) dispatch(fetchProductsController(user,{filterType:filterType}));
-        console.log("The user we are supposdly sending: ",user);
 
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -45,7 +42,6 @@ const ProductResults = () => {
 
 
     useEffect(()=>{
-      console.log("The data we received in teh useEFfect is: ",data);
     },[data]);
 
     if (!Array.isArray(data)) return null;

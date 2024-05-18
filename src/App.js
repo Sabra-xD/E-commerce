@@ -25,7 +25,6 @@ function App() {
 
 
   useEffect(()=>{
-    console.log("Should read info");
     if(dispatch(readUserInfo)){
       dispatch(readProducts);
       dispatch(readCartList)

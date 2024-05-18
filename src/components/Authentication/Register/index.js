@@ -50,20 +50,15 @@ const Register = () => {
 
 
     const handleSignInWithGoogle = ()=>{
-        console.log("Dispatched");
         dispatch(signInWithGoogle);
     }
 
 
     const handleSubmit = (e)=>{
         e.preventDefault();
-        console.log("Email: ",email);
-        console.log("Password: ",password);
-        console.log("Confirm Pass: ",confirmPass);
-        console.log("Name: ",name);
         dispatch(createAccount(email,password,confirmPass,name)).then(
             (res)=>{
-                console.log("Response before navigating: ",res);
+                navigator('/');
                 //ToDO: Navigate to HomePage
             }
         );

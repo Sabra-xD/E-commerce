@@ -19,7 +19,6 @@ const Login = () => {
     
     useEffect(()=>{
         if(signInSucess){
-            console.log("Navigating to HomePage");
             navigator('/');
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -43,8 +42,6 @@ const Login = () => {
 
     const handleSubmit = async (e)=>{
         e.preventDefault();
-        console.log("The final email value is: ", email);
-        console.log("The final password value is: ",password);
          dispatch(signInWithEmailAndPasswordController({email,password}));
     }
 

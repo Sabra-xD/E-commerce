@@ -45,7 +45,6 @@ export const userSlice = createSlice({
       state.signUpSucess = action.payload;
     },
     signUpError: (state,action) => {
-      console.log("Non-Serializable Action?: ",action.payload);
       state.signUpError = action.payload;
     }
   },
@@ -100,45 +99,6 @@ export const signInWithEmailAndPasswordController = createAsyncThunk(
 );
 
 
-// export const signInWithEmailAndPasswordController =  (email, password) => async (dispatch) => {
-//   try {
-//     // Default Authentication in Firebase
-//    const res = await signInWithEmailAndPassword(auth, email, password);
-
-//     // Fetching userInfo from the fireStore (no dispatch here)
-//     const userInfo = await fetchUserInfo(res.user); // Assuming `res` is available from the previous line
-
-//     if (!userInfo) {
-//       dispatch(signInError('Something went wrong')); // Dispatch error if user info not found
-//       return;
-//     }
-//       //Fetching userInfo from the fireStore.
-//         if(userInfo){
-//           console.log("User info inside the signIN: ",userInfo);
-//           const userData = {
-//           user: {
-//             displayName: userInfo.displayName,
-//             email: userInfo.email,
-//             userRoles: userInfo.userRoles,
-//             photoURL: '',
-//             uid: userInfo.uid,
-//             idToken: res.user.accessToken,
-//           }
-//         };
-
-//         dispatch(setUser(userData));
-//         dispatch(signInSuccess(true));
-//         dispatch(signInError(''));
-//       }else{
-//         dispatch(signInError('Something went wrong'));
-//       }
-//       }
-
-//   catch (error) {
-//     console.error("Error signing in with Email and Password:", error);
-//     dispatch(signInError(error.code || 'An unknown error occurred')); // Dispatch error message
-//   }
-// };
 
 
 export const signInWithGoogle = async (dispatch) => {
@@ -194,6 +154,7 @@ export const createAccount =  (email, password, confirmPass, displayName) => asy
 
   try {
     await createUserWithEmailAndPassword(auth, email, password).then(async (response)=>{
+      
       const userData = {
         user: {
           displayName: displayName,
@@ -222,7 +183,6 @@ export const createAccount =  (email, password, confirmPass, displayName) => asy
 
 
 export const resetPassword = async(email) =>{
-  console.log("Inside the resetPassword Function");
   try{
     await sendPasswordResetEmail(auth,email).then((res)=>{
     }).catch((err)=>{

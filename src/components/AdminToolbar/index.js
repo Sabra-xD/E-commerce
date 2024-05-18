@@ -8,12 +8,10 @@ import "./styles.scss";
 
 
 const AdminToolbar = () =>{
-    console.log("Inside the AdminToolBar");
 
     const currentUser = useSelector(selectCurrentUser);
 
     const isAdmin = checkUserAdmin(currentUser);
-    console.log("Is the user an admin? ",isAdmin);
     if(!isAdmin) return null;
     return(
     <div className="adminToolbar">

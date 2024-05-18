@@ -21,7 +21,6 @@ const CartButton = ({ product }) => {
 
 
     useEffect(()=>{
-        console.log("The cartItems: ",cartItems);
        if(checkIfExist(product,cartItems)){
 
         setExists(true)
