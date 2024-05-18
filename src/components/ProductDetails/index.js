@@ -6,6 +6,7 @@ import { useParams } from "react-router-dom";
 
 import './styles.scss';
 import CartButton from "../CartButton/CartButton";
+import { altImage } from "../../assets/altImage";
 
 //Don't forget to cleam that product passing bit in Cart Button.
 
@@ -34,7 +35,7 @@ const ProductDetails = () => {
         <div className="wrapper">
 
             <div className="productDetails">
-            <img alt="ProductThumbnail" src={productPhoto}/>
+            <img alt={altImage} src={productPhoto}/>
             <div>
             <h4>{productName}</h4>
             <h5>{productPrice}$</h5>

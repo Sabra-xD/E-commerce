@@ -15,9 +15,6 @@ const Product = ({
 }) => {
 
     const navigator = useNavigate();
-    // const cartList = useSelector(getCartList);
-    // const dispatch = useDispatch();
-    // const [exsists,setExists] = useState(false);
     const product = {
         productName,
          productPhoto,

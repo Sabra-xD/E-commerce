@@ -19,6 +19,7 @@ import { readProducts } from './rtk/products/productSlice';
 import SearchPage from './pages/SearchPage';
 import ProductDetails from './components/ProductDetails';
 import { readCartList } from './rtk/cart/cartSlice';
+import CheckOut from './components/CheckOut';
 
 function App() {
   const dispatch = useDispatch();
@@ -72,6 +73,11 @@ function App() {
         </MainLayout>
       }/>
 
+  <Route path="checkout" element={
+    <MainLayout>
+      <CheckOut />
+    </MainLayout>
+  }></Route>
 
 
 

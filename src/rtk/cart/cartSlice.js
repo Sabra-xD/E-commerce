@@ -24,7 +24,8 @@ export const cartSlice = createSlice({
                 state.cartItems.push(newCartItem);
                 state.totalNumCartItems = state.cartItems.length;
                 const plainObject = JSON.parse(JSON.stringify(state.cartItems));
-                saveCart(plainObject);  // Save the updated cartItems array
+                state.totalPrice = parseFloat(state.totalPrice) + parseFloat(newCartItem.productPrice);
+                saveCart(plainObject);  
 
             
                 
@@ -33,11 +34,10 @@ export const cartSlice = createSlice({
         ,
         removeCartItem: (state, action) => {
             state.cartItems = state.cartItems.filter(item => item.documentID !== action.payload.documentID);
-
             state.totalNumCartItems = state.cartItems.length;
             const plainObject = JSON.parse(JSON.stringify(state.cartItems));
-                saveCart(plainObject);  // Save the updated cartItems array
-
+            saveCart(plainObject);  
+            state.totalPrice = parseFloat(state.totalPrice) - parseFloat(action.payload.productPrice);
         }
     }
 });
@@ -48,6 +48,7 @@ export default cartSlice.reducer;
 
 export const getCartList = (state) => state.cart?.cartItems;
 export const getCartCount = (state) => state.cart?.totalNumCartItems;
+export const getTotalPrice = (state)=> state.cart?.totalPrice;
 
 
 
