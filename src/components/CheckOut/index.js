@@ -1,16 +1,38 @@
 import { useDispatch, useSelector } from 'react-redux';
 import './styles.scss';
-import { checkIfExist, getCartCount, getCartList, getTotalPrice, removeCartItem } from '../../rtk/cart/cartSlice';
+import { checkIfExist,getCartCount, getCartList, getTotalPrice, removeCartItem } from '../../rtk/cart/cartSlice';
 import Button from '../Form/Button';
 import { useNavigate } from 'react-router-dom';
 
 const CheckOut = () => {
-
     const products = useSelector(getCartList);
     const cartListCount = useSelector(getCartCount);
     const totalPrice = useSelector(getTotalPrice);
     const navigator = useNavigate();
     const dispatch = useDispatch();
+
+    const fetchData = async (products) => {
+        try {
+          const response = await fetch("http://localhost:5000/create-checkout-session", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              items: products,
+            }),
+          });
+  
+          if (!response.ok) {
+            console.log("Error was thrown");
+            throw new Error(await response.text());
+          }
+          const data = await response.json();
+          window.location.href = data.url;
+        } catch (error) {
+            console.log("The error in the fetch function is: ",error);
+        }
+      };
     
 
     const handleActionButton = (product) => {
@@ -61,7 +83,10 @@ const CheckOut = () => {
             <Button onClick={()=>{
                 navigator('/search');
             }}>Continue Shopping</Button>
-            <Button>Check Out</Button>
+            <Button onClick={()=>{
+                console.log("The products we're buying: ",products);
+                fetchData(products);
+            }}>Check Out</Button>
 
             </div>
           </td>

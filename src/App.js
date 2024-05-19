@@ -20,7 +20,9 @@ import SearchPage from './pages/SearchPage';
 import ProductDetails from './components/ProductDetails';
 import { readCartList } from './rtk/cart/cartSlice';
 import CheckOut from './components/CheckOut';
-
+import PaymentPage from './pages/PaymentPage';
+import Sucess from './components/Response/Sucess';
+import Fail from './components/Response/Fail';
 function App() {
   const dispatch = useDispatch();
 
@@ -109,7 +111,25 @@ function App() {
       <Route  path="current" element={
         <CurrentUser />
       }/>
+
+      <Route path="payment" element={
+        <MainLayout>
+          <PaymentPage />
+        </MainLayout>
+      }/>
       
+      <Route path="success" element={
+        <MainLayout>
+                  <Sucess />
+        </MainLayout>
+      }/>
+
+      <Route path="fail" element={
+        <MainLayout>
+          <Fail/>
+        </MainLayout>
+      }/>
+
       </Routes>
 
     </div>

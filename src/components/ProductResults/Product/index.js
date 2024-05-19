@@ -1,9 +1,4 @@
 import { useNavigate } from "react-router-dom";
-// import Button from "../../Form/Button";
-// import '../styles.scss'
-// import { useDispatch, useSelector } from "react-redux";
-// import { addToCartController, checkIfExist, getCartList } from "../../../rtk/cart/cartSlice";
-// import { useEffect, useState } from "react";
 import CartButton from "../../CartButton/CartButton";
 
 const Product = ({

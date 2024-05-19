@@ -9,6 +9,14 @@ export const cartSlice = createSlice({
         totalPrice: 0,
     },
     reducers: {
+        clearCart: (state,action) => {
+            //Here we need to clear, basically reset everything.
+            state.cartItems=[];
+            state.totalNumCartItems = state.cartItems.length;
+            state.totalPrice = 0;
+            const plainObject = JSON.parse(JSON.stringify(state.cartItems));
+            saveCart(plainObject);
+        },
 
         fetchCartItems: (state,action) => {
             if(action.payload){
@@ -43,7 +51,7 @@ export const cartSlice = createSlice({
 });
 
 
-export const {addCartItem,removeCartItem,fetchCartItems} = cartSlice.actions;
+export const {addCartItem,removeCartItem,fetchCartItems,clearCart} = cartSlice.actions;
 export default cartSlice.reducer;
 
 export const getCartList = (state) => state.cart?.cartItems;
