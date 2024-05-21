@@ -125,7 +125,7 @@ function App() {
       }/>
 
       <Route path="fail" element={
-        <MainLayout>
+        <MainLayout>x
           <Fail/>
         </MainLayout>
       }/>

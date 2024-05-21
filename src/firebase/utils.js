@@ -38,6 +38,7 @@ export const handleUserProfile = async (userAuth, additionalData) => {
       email,
       userRoles,
       uid: uid,
+      orderHistory: [],
       createdDate: timestamp,
       ...additionalData
     });
@@ -56,7 +57,7 @@ export const fetchUserInfo = async (userAuth) => {
   try{
     const q = query(userRef, where("uid", "==", `${uid}`));
     const querySnapshot = await getDocs(q);
-if (querySnapshot.size > 0) { // Check if there are any documents
+if (querySnapshot.size > 0) {
   const firstDocData = querySnapshot.docs[0].data();
   return firstDocData;
 } else {

@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { clearCart } from "../cart/cartSlice";
 import { auth, fetchUserInfo, GoogleProvider, handleUserProfile } from "../../firebase/utils";
 import {
   signInWithPopup,
@@ -22,7 +23,7 @@ export const userSlice = createSlice({
       if (action.payload.user === null) {
         state.user = null;
       } else {
-        const { displayName, email, photoURL, uid, idToken, userRoles } = action.payload.user;
+        const { displayName, email, photoURL, uid, idToken, userRoles,orderHistory } = action.payload.user;
         const userData = {
           displayName,
           email,
@@ -30,9 +31,12 @@ export const userSlice = createSlice({
           userRoles: userRoles,
           tokenId: idToken,
           photo: photoURL,
+          orderHistory: orderHistory,
         };
+        console.log("The userData: ",userData);
         saveUserInfo(userData);
         state.user = userData;
+        console.log("The state user: ",state.user);
       }
     },
     signInSuccess: (state, action) => {
@@ -74,8 +78,7 @@ export const signInWithEmailAndPasswordController = createAsyncThunk(
         dispatch(signInError('Something went wrong'));
         return false;
       }
-
-      // Fetching userInfo from the fireStore.
+      console.log("The userInfo: ",userInfo);
       const userData = {
         user: {
           displayName: userInfo.displayName,
@@ -83,6 +86,7 @@ export const signInWithEmailAndPasswordController = createAsyncThunk(
           userRoles: userInfo.userRoles,
           photoURL: '',
           uid: userInfo.uid,
+          orderHistory: userInfo.orderHistory,
           idToken: res.user.accessToken,
         }
       };
@@ -135,6 +139,7 @@ export const logOut = async (dispatch) => {
     dispatch(setUser({ user: null }));
     dispatch(signInSuccess(false));
     dispatch(signUpSucess(false));
+    dispatch(clearCart());
   } catch (error) {
     console.error("Error in the LogOut: ", error);
   }
@@ -161,6 +166,7 @@ export const createAccount =  (email, password, confirmPass, displayName) => asy
           email: email,
           photoURL: '',
           uid: response.user.uid,
+          orderHistory: [],
           idToken: response.user.accessToken,
         }
       };
