@@ -11,6 +11,7 @@ const CheckOut = () => {
     const cartListCount = useSelector(getCartCount);
     const totalPrice = useSelector(getTotalPrice);
     const user = useSelector(selectCurrentUser);
+    console.log("The user after the selector: ",user);
     const navigator = useNavigate();
     const dispatch = useDispatch();
 

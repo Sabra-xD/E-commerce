@@ -91,7 +91,7 @@ export const signInWithEmailAndPasswordController = createAsyncThunk(
       };
 
       dispatch(setUser(userData));
-
+      console.log("The orderHistory we are setting: ",userInfo.orderHistory);
       dispatch(setOrderHistory(userInfo.orderHistory));
       
       dispatch(signInSuccess(true));

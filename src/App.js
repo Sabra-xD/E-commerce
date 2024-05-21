@@ -24,6 +24,8 @@ import PaymentPage from './pages/PaymentPage';
 import Sucess from './components/Response/Sucess';
 import Fail from './components/Response/Fail';
 import Orders from './components/Orders';
+import DashboardLayOut from './layouts/DashboardLayOut';
+import MyAccount from './pages/MyAccount';
 function App() {
   const dispatch = useDispatch();
 
@@ -83,9 +85,11 @@ function App() {
   }></Route>
 
 
-  <Route path="orders" element={
+  <Route path="myaccount" element={
     <MainLayout>
-      <Orders/>
+      <DashboardLayOut>
+        <MyAccount/>
+      </DashboardLayOut>
     </MainLayout>
   }/>
 
@@ -110,8 +114,11 @@ function App() {
         //We need to add the WithAuth around it, make sure they have permission.
         <WithAdminAuth>
             <AdminLayOut>
+              <DashboardLayOut>
               <Admin />
+            </DashboardLayOut>
           </AdminLayOut>
+          
         </WithAdminAuth>
      
       } />

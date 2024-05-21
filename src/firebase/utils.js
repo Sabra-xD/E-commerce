@@ -25,8 +25,6 @@ export const handleUserProfile = async (userAuth, additionalData) => {
   const userRef = doc(collection(firestore, "users"), uid); // Specify the collection name
   
 
-  const querySnapshot = await getDocs(collection(firestore, "users"),uid);
-  // const snapshot = await userRef.get();
 
   const { displayName, email } = userAuth;
   const timestamp = new Date();

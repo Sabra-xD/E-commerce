@@ -1,53 +1,54 @@
 
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import './styles.scss';
-import { getOrderHistory } from '../../rtk/orders/orderSlice';
 import { useEffect } from 'react';
-import { selectCurrentUser } from '../../rtk/user/userSlice';
+import { getOrderHistory, readOrderHistory } from '../../rtk/orders/orderSlice';
 
 const Orders = () => {
 //The useSelector is RETURN FUCKING NULL FOR NO FUCKING REASON.
+const dispatch = useDispatch();
+const orderHistory = useSelector(getOrderHistory);
 
-const user = useSelector(selectCurrentUser);
-console.log("The user before oder history:  ",user);
-const orderHistory = user?.orderHistory;
 
-console.log("The order history we've is: ",orderHistory)
-
-useEffect(()=>{
-    
-},);
+useEffect(() => {
+    dispatch(readOrderHistory);
+},[dispatch]);
 
 console.log("The order history is: ",orderHistory);
     return(
-        //We need to map the order IDs here inside a table.
-        <div className='table-wrapper'>
-            <table className="product-table">
+
+        orderHistory  ? (
+            <div className='table-wrapper'>
+                <h4>Previous Orders</h4>
+              <table className="product-table">
                 <thead>
-                <tr>
+                  <tr>
                     <th>Order ID</th>
                     <th>Number of Items</th>
                     <th>Total Price</th>
-                </tr>
+                  </tr>
                 </thead>
                 <tbody>
-                {orderHistory?.map((details, index) => (
+                  {orderHistory?.map((details, index) => (
                     <tr key={index}>
-                    <td>{details.orderID}</td>
-                    <td>{details.totalNum}</td>
-                    <td>{details.totalPrice}</td>
+                      <td>{details.orderID}</td>
+                      <td>{details.totalNum}</td>
+                      <td>{details.totalPrice}</td>
                     </tr>
-                ))}
+                  ))}
                 </tbody>
-                
-         
-        </table>
-
-  
-
-        </div>
+              </table>
+            </div>
+          ) : (
+            <div className='container'>
+                <h4>There are no past orders</h4>
+            </div>
+          )
     )
 }
 
 
 export default Orders
+
+
+

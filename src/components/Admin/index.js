@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from "react-redux";
-import AdminNavBar from "../AdminNavBar.js";
 import AddProduct from "./AddNewProduct/AddProduct.js";
 import "./styles.scss";
 import { deleteProductController, fetchProductsController, getAllProducts } from "../../rtk/products/productSlice.js";
@@ -53,10 +52,7 @@ const Admin = () => {
     return (
         
             <>
-              <div className="admin">
-                <div className="NavBarContainer">
-                  <AdminNavBar />
-                </div>
+
                 <div className="AddProductContainer">
                   <AddProduct />
           
@@ -116,7 +112,7 @@ const Admin = () => {
                     {showAlert && <Alert message="Product deleted successfully!" />}
                   </div>
                 </div>
-              </div>
+
             </>
           );
        

@@ -33,8 +33,8 @@ export const saveOrder = (cartItems,totalPrice,user) => async(dispatch) => {
             console.log("The orderID: ",orderID);
 
             //We make alist containing all orderIDs.
-            dispatch(updateOrderHistory(orderID));
-            updateUserOrderHistory(orderID,user);
+            dispatch(updateOrderHistory({orderID:orderID,totalNum: cartItems.length,totalPrice: totalPrice}));
+            updateUserOrderHistory(orderID,cartItems.length,totalPrice,user);
 
            
         }
@@ -65,7 +65,7 @@ export const addOrder =  (order) =>{
     })
   }
 
-  export const updateUserOrderHistory = (orderID, user) => {
+  export const updateUserOrderHistory = (orderID,totalNum,totalPrice ,user) => {
     console.log("The user we are updating: ", user);
     return new Promise(async (resolve, reject) => {
         try {
@@ -82,7 +82,7 @@ export const addOrder =  (order) =>{
             console.log("The user ref is: ", userRef);
 
             await updateDoc(userRef, {
-                orderHistory: arrayUnion(orderID),
+                orderHistory: arrayUnion({orderID,totalNum,totalPrice}),
             });
             console.log("Order history updated successfully");
             resolve();

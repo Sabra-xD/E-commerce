@@ -5,11 +5,10 @@ import '../styles.scss';
 import { signInWithGoogle } from "../../../rtk/user/userSlice";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-// import {useNavigate } from "react-router-dom";
-
+import FormInput from "../../Form/FormInput";
+import Button from "../../Form/Button";
 
 const Register = () => {
-    // const navigator = useNavigate();
     const dispatch = useDispatch();
     const signUpError = useSelector(state=>state.user.signUpError);
     const signUpSucess = useSelector(selectSignUpSuccess);
@@ -18,7 +17,6 @@ const Register = () => {
     const [password,setPassword] = useState('');
     const [confirmPass,setConfirmPass] = useState('');
     const [name, setName] = useState('');
-
 
     useEffect(()=>{
         if(signUpSucess){
@@ -29,14 +27,11 @@ const Register = () => {
 
     const handleNameChange = (event) => {
         setName(event.target.value);
-};
-
-
+    };
 
     const handleConfirmPass = (event)=>{
         setConfirmPass(event.target.value);
     }
-
 
     const handleInputChange = (event,isEmail) =>{
         if(isEmail){
@@ -46,13 +41,9 @@ const Register = () => {
         }
     }
 
-  
-
-
     const handleSignInWithGoogle = ()=>{
         dispatch(signInWithGoogle);
     }
-
 
     const handleSubmit = (e)=>{
         e.preventDefault();
@@ -63,61 +54,47 @@ const Register = () => {
             }
         );
     }
-  const ErrorMessage = () =>{
-    return(
-      
-      signUpError==='' ? null: (
 
-        <h5>Error: {signUpError}</h5>
-
-      )
-      
-    )
-  }
-
+    const ErrorMessage = () =>{
+        return(
+          
+          signUpError==='' ? null: (
+            <h5>Error: {signUpError}</h5>
+          )
+        )
+    }
    
     return(
+        <form className="form-container" onSubmit={(e)=>{
+            handleSubmit(e)
+        }}>
+            <FormInput placeholder="Name" onChange={(e)=>{
+                handleNameChange(e);
+            }}/>
 
-            <form className="form-container" onSubmit={(e)=>{
-                handleSubmit(e)
-            }}>
-                
-                <input className="input"  placeholder="Name" onChange={(e)=>{
-                    handleNameChange(e);
-                }}/>
+            <FormInput placeholder="Email" onChange={(e)=>{
+                handleInputChange(e,true);
+            }}/>
 
-                <input className="input"  placeholder="Email" onChange={(e)=>{
-                    handleInputChange(e,true);
-                }}/>
+            <FormInput placeholder="Password" onChange={(e)=>{
+                handleInputChange(e,false);
+            }}/>
 
-                <input className="input" placeholder="Password" onChange={(e)=>{
-                    handleInputChange(e,false);
-                }}/>
+            <FormInput placeholder="Confirm password" onChange={handleConfirmPass}/>
 
-                <input className="input" placeholder="Confirm password" onChange={handleConfirmPass}/>
+            <Button onClick={(e)=>{
+                handleSubmit(e);
+            }}>Sign Up</Button>
 
-                <button className="form-button" onClick={(e)=>{
-                    //Sign Up Via Email logic.
-                    handleSubmit(e);
+            <hr/>
 
-                }}>Sign Up</button>
+            <Button onClick={handleSignInWithGoogle}>Sign Up With Google</Button>
 
-                <hr className="divider"/>
-
-
-                <button className="form-button" onClick={handleSignInWithGoogle
-                    //Sign up via google logic.
-                }>Sign Up With Google</button>
-
-
-                {
-                         ErrorMessage()
-
-                }
-            </form>
-         
+            {
+                ErrorMessage()
+            }
+        </form>
     );   
 }
-
 
 export default Register;

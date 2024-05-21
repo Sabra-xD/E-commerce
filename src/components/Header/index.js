@@ -37,9 +37,8 @@ const Header = () => {
         ): (
             <>
               <Link to="/search">Search</Link>
-              
               <Link to="/checkout">Your Cart: ({cartCount})</Link>
-              <Link  to="">My Account</Link>
+              <Link  to="/myaccount">My Account</Link>
               <Link style={{color:"red"}} onClick={()=>{
                 dispatch(logOut).then(naviate('/'));
               }}>Log Out</Link>
@@ -68,8 +67,8 @@ const Header = () => {
       return (
         <div className="container">
 
-{
-          
+        {
+
           }
           <Link to="/">Home Page</Link>
          

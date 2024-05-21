@@ -64,25 +64,7 @@ export const fetchProductWithID = (user,documentID) => async(dispatch) => {
 }
 
 
-// export const fetchProductsController = (user,payload) => async(dispatch) => {
-//     try{
-//         console.log("The payload is: ",payload);
-//         console.log("The user is: ",user);
-//         if(user?.uid){
-//             console.log("Inside the if condition");
-//        const products = await handleFetchProducts(payload);
-//        console.log("The products we got back insie the fetch: ",products);
-//        const {data} = products;
-//         console.log("The data we got back inside the fetchProductController: ",data)
-//         dispatch(getProducts(data));
-//         //Save products locally:
-//         dispatch(saveProducts(data));
-//         }
-        
-//     }catch(error){
-//         console.log("Error in the fetchProductsController", error);
-//     }
-// }
+
 
 export const fetchProductsController = (user, payload) => async (dispatch) => {
     try {

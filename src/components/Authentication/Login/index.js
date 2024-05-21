@@ -1,10 +1,11 @@
 // import { signInWithGoogle } from "../../firebase/utils";
 import { useDispatch, useSelector } from "react-redux";
-import {selectSignInSuccess, signInWithEmailAndPasswordController, signInWithGoogle } from "../../../rtk/user/userSlice";
+import { selectSignInSuccess, signInWithEmailAndPasswordController, signInWithGoogle } from "../../../rtk/user/userSlice";
 import '../styles.scss';
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-
+import FormInput from "../../Form/FormInput";
+import Button from "../../Form/Button";
 
 const Login = () => {
 
@@ -58,38 +59,35 @@ const Login = () => {
       }
 
     return(
+        <form className="form-container" onSubmit={(e)=>{
+            handleSubmit(e)
+        }}>
+  
+            <FormInput  label="Email" placeholder="Email" onChange={(e)=>{
+                handleInputChange(e,true);
+            }}/>
+            <FormInput  label="Password" placeholder="Password" onChange={(e)=>{
+                handleInputChange(e,false);
+            }}/>
 
-            <form className="form-container" onSubmit={(e)=>{
-                handleSubmit(e)
-            }}>
-      
-                <input className="input"  placeholder="Email" onChange={(e)=>{
-                    handleInputChange(e,true);
-                }}/>
-                <input className="input" placeholder="Password" onChange={(e)=>{
-                    handleInputChange(e,false);
-                }}/>
-
-                <button className="form-button" onClick={(e)=>{
-                    handleSubmit(e);
-                }}>Login</button>
-                
-                <hr/>
-                
-                <button className="form-button" onClick={handleSignInWithGoogle}>Sign In With Google</button>
+            <Button  onClick={(e)=>{
+                handleSubmit(e);
+            }}>Login</Button>
+            
+            <hr/>
+            
+            <Button  onClick={handleSignInWithGoogle}>Sign In With Google</Button>
 
 
-                <Link className="link-top" to="/reset-password">Forgot your password? Reset</Link>
+            <Link className="link-top" to="/reset-password">Forgot your password? Reset</Link>
 
-                
-                {
-                    ErrorMessage()
-                }
+            
+            {
+                ErrorMessage()
+            }
 
-            </form>
-         
+        </form>
     );   
 }
-
 
 export default Login;
