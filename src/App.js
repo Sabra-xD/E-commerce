@@ -23,6 +23,7 @@ import CheckOut from './components/CheckOut';
 import PaymentPage from './pages/PaymentPage';
 import Sucess from './components/Response/Sucess';
 import Fail from './components/Response/Fail';
+import Orders from './components/Orders';
 function App() {
   const dispatch = useDispatch();
 
@@ -80,6 +81,13 @@ function App() {
       <CheckOut />
     </MainLayout>
   }></Route>
+
+
+  <Route path="orders" element={
+    <MainLayout>
+      <Orders/>
+    </MainLayout>
+  }/>
 
 
 

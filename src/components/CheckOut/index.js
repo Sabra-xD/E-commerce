@@ -3,11 +3,14 @@ import './styles.scss';
 import { checkIfExist,getCartCount, getCartList, getTotalPrice, removeCartItem } from '../../rtk/cart/cartSlice';
 import Button from '../Form/Button';
 import { useNavigate } from 'react-router-dom';
+import { saveOrder } from '../../rtk/orders/ordersUtils';
+import { selectCurrentUser } from '../../rtk/user/userSlice';
 
 const CheckOut = () => {
     const products = useSelector(getCartList);
     const cartListCount = useSelector(getCartCount);
     const totalPrice = useSelector(getTotalPrice);
+    const user = useSelector(selectCurrentUser);
     const navigator = useNavigate();
     const dispatch = useDispatch();
 
@@ -85,7 +88,8 @@ const CheckOut = () => {
             }}>Continue Shopping</Button>
             <Button onClick={()=>{
                 console.log("The products we're buying: ",products);
-                fetchData(products);
+                // fetchData(products);
+                dispatch(saveOrder(products,totalPrice,user));
             }}>Check Out</Button>
 
             </div>

@@ -15,6 +15,7 @@ const ProductResults = () => {
 
     const dispatch = useDispatch();
     const user = useSelector(selectCurrentUser);
+    console.log("The user RIGHT AFTER the selector: ",user);
 
     // const {filterTypeFromLink} = useParams();
 

@@ -7,6 +7,7 @@ import {
   signInWithEmailAndPassword,
   sendPasswordResetEmail,
 } from "firebase/auth";
+import { setOrderHistory } from "../orders/orderSlice";
 
 export const userSlice = createSlice({
   name: "user",
@@ -33,10 +34,8 @@ export const userSlice = createSlice({
           photo: photoURL,
           orderHistory: orderHistory,
         };
-        console.log("The userData: ",userData);
         saveUserInfo(userData);
         state.user = userData;
-        console.log("The state user: ",state.user);
       }
     },
     signInSuccess: (state, action) => {
@@ -92,6 +91,9 @@ export const signInWithEmailAndPasswordController = createAsyncThunk(
       };
 
       dispatch(setUser(userData));
+
+      dispatch(setOrderHistory(userInfo.orderHistory));
+      
       dispatch(signInSuccess(true));
       return true;
     } catch (error) {
@@ -117,12 +119,14 @@ export const signInWithGoogle = async (dispatch) => {
 };
 
 const saveUserInfo = (userData) => {
+  console.log("The userData we're saving: ",userData);
   localStorage.setItem("userData", JSON.stringify(userData));
 };
 
 export const readUserInfo = (dispatch) => {
   const userDataString = localStorage.getItem("userData");
   const userData = JSON.parse(userDataString);
+  console.log("The read user info is: ",userData);
 
 
   if (userData) {
