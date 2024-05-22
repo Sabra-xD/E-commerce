@@ -3,11 +3,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import './styles.scss';
 import { useEffect } from 'react';
 import { getOrderHistory, readOrderHistory } from '../../rtk/orders/orderSlice';
+import { useNavigate } from 'react-router-dom';
+import moment from 'moment';
 
 const Orders = () => {
 //The useSelector is RETURN FUCKING NULL FOR NO FUCKING REASON.
 const dispatch = useDispatch();
 const orderHistory = useSelector(getOrderHistory);
+const navigator = useNavigate();
 
 
 useEffect(() => {
@@ -23,6 +26,7 @@ console.log("The order history is: ",orderHistory);
               <table className="product-table">
                 <thead>
                   <tr>
+                    <th>Date of Purchase</th>
                     <th>Order ID</th>
                     <th>Number of Items</th>
                     <th>Total Price</th>
@@ -31,7 +35,10 @@ console.log("The order history is: ",orderHistory);
                 <tbody>
                   {orderHistory?.map((details, index) => (
                     <tr key={index}>
-                      <td>{details.orderID}</td>
+                      <td>{moment(details.createdAt).format("DD/MM/YY")}</td>
+                      <td onClick={()=>{
+                        navigator(`/orderDetails/${details.orderID}`);
+                      }}>{details.orderID}</td>
                       <td>{details.totalNum}</td>
                       <td>{details.totalPrice}</td>
                     </tr>

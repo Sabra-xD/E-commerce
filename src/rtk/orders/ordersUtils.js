@@ -54,8 +54,6 @@ export const saveOrder = (cartItems,totalPrice,user) => async(dispatch) => {
 export const addOrder =  (order) =>{
     return new Promise( async(resolve,reject)=>{
     await addDoc(collection(firestore,"orders"),order).then((res)=>{
-        console.log("The query response: ",res)
-        console.log("The query response IDL ",res.id);
         resolve(res.id);
       }).catch(
         err => {
@@ -69,15 +67,18 @@ export const addOrder =  (order) =>{
     console.log("The user we are updating: ", user);
     return new Promise(async (resolve, reject) => {
         try {
+            console.log("Before the getDocs");
+            console.log("The user uid: ",user.uid);
             const q = query(collection(firestore, "users"), where("uid", "==", user.uid));
             const querySnapshot = await getDocs(q);
-
+            console.log("After the getDocs");
             if (querySnapshot.empty) {
                 throw new Error("No document found for the user");
             }
 
             // Assume the uid is unique, so there should be only one document
             const userDoc = querySnapshot.docs[0];
+            console.log("The userDOC.id: ",userDoc.id);
             const userRef = doc(firestore, "users", userDoc.id);
             console.log("The user ref is: ", userRef);
 
@@ -95,6 +96,7 @@ export const addOrder =  (order) =>{
   
 export const fetchOrderWithID = (orderID) => {
     return new Promise ( async(resolve,reject) => {
+        console.log("The orderID we got: ",orderID);
         try {
             const orderRef = doc(firestore,"orders",orderID);
             const orderDoc = await getDoc(orderRef);

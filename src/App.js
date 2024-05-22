@@ -26,6 +26,7 @@ import Fail from './components/Response/Fail';
 import Orders from './components/Orders';
 import DashboardLayOut from './layouts/DashboardLayOut';
 import MyAccount from './pages/MyAccount';
+import OrderDetails from './components/OrderDetails';
 function App() {
   const dispatch = useDispatch();
 
@@ -92,6 +93,14 @@ function App() {
       </DashboardLayOut>
     </MainLayout>
   }/>
+
+  <Route path="orderDetails/:orderID" element={
+    <MainLayout>
+      <DashboardLayOut>
+        <OrderDetails />
+      </DashboardLayOut>
+    </MainLayout>
+  } />
 
 
 

@@ -20,8 +20,7 @@ export const handleUserProfile = async (userAuth, additionalData) => {
   if (!userAuth) return;
   const { uid } = userAuth;
 
-  // Using collectionRef.doc() for Firestore v9+
-
+  console.log("The userAuth: ",userAuth);
   const userRef = doc(collection(firestore, "users"), uid); // Specify the collection name
   
 
