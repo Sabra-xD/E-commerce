@@ -1,0 +1,37 @@
+.form-container1 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100%;
+}
+
+.billing-form {
+    width: 80%;
+    max-width: 800px;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+    .form-description {
+        margin-bottom: 15px;
+    }
+
+    .mobile-text {
+        display: none;
+    }
+
+    @media (max-width: 600px) {
+        width: 90%;
+        padding: 10px;
+
+        .default-text {
+            display: none;
+        }
+
+        .mobile-text {
+            display: block;
+        }
+    }
+}

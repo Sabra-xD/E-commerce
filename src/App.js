@@ -27,6 +27,7 @@ import Orders from './components/Orders';
 import DashboardLayOut from './layouts/DashboardLayOut';
 import MyAccount from './pages/MyAccount';
 import OrderDetails from './components/OrderDetails';
+import BillingForm from './components/BillingForm';
 function App() {
   const dispatch = useDispatch();
 
@@ -101,6 +102,14 @@ function App() {
       </DashboardLayOut>
     </MainLayout>
   } />
+
+
+  <Route path="delivery-information" element={
+    <MainLayout>
+      <BillingForm />
+    </MainLayout>
+  }
+  />
 
 
 
