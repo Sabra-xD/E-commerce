@@ -32,7 +32,6 @@ export const saveOrder = (cartItems,totalPrice,user) => async(dispatch) => {
             console.log("Order was added successfully");
             console.log("The orderID: ",orderID);
 
-            //We make alist containing all orderIDs.
             dispatch(updateOrderHistory({orderID:orderID,totalNum: cartItems.length,totalPrice: totalPrice}));
             updateUserOrderHistory(orderID,cartItems.length,totalPrice,user);
 

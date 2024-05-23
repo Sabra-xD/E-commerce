@@ -1,8 +1,32 @@
 
+import { collection, doc, updateDoc,query,getDocs, where } from "firebase/firestore";
+import { firestore } from "../../firebase/utils";
 
-export const updateUserDeliveryInfo = (deliveryInfo) => {
-    //Push that shit to the user
-    //Also reset the user here.
+export const updateUserDeliveryInfo = (deliveryInfo,user) =>{
+
+    return new Promise(async(resolve,reject)=>{
+        try{
+            const q = query(collection(firestore, "users"), where("uid", "==", user.uid));
+            const querySnapshot = await getDocs(q);
+            if(querySnapshot.empty){
+                throw new Error("No document found for the user");
+            }
+            const userDoc = querySnapshot.docs[0];
+            console.log("The userDOC.id: ",userDoc.id);
+            const userRef = doc(firestore, "users", userDoc.id);
+            console.log("The user ref is: ", userRef);
+            await updateDoc(userRef, {
+                deliveryInfo: {
+                    city:"such your mum",
+                }
+            }).then(res=>{
+                console.log("The updateDoc response: ",res);
+            });
+            resolve();
+        }catch(error){
+            reject(error);
+        }
+    })
 }
 
 

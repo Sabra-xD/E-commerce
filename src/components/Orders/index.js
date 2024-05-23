@@ -7,7 +7,6 @@ import { useNavigate } from 'react-router-dom';
 import moment from 'moment';
 
 const Orders = () => {
-//The useSelector is RETURN FUCKING NULL FOR NO FUCKING REASON.
 const dispatch = useDispatch();
 const orderHistory = useSelector(getOrderHistory);
 const navigator = useNavigate();
@@ -17,9 +16,7 @@ useEffect(() => {
     dispatch(readOrderHistory);
 },[dispatch]);
 
-console.log("The order history is: ",orderHistory);
     return(
-
         orderHistory  ? (
             <div className='table-wrapper'>
                 <h4>Previous Orders</h4>

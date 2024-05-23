@@ -5,9 +5,7 @@ import AdminNavBar from '../components/AdminNavBar.js';
 const DashboardLayout = (props) => {
     return (
         <div className="admin">
-            <div className="NavBarContainer">
-                <AdminNavBar />
-            </div>
+                <AdminNavBar/>                
                 {props.children}
         </div>
     );

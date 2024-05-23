@@ -7,6 +7,9 @@
 }
 
 .billing-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     width: 80%;
     max-width: 800px;
     background-color: #fff;
@@ -16,6 +19,18 @@
 
     .form-description {
         margin-bottom: 15px;
+    }
+
+    .countryLabel {
+        align-self: flex-start; /* Align the label to the start */
+    }
+
+    .selectCountry {
+        width: 100%;
+        margin-top: 10px;
+        margin-right:22px;
+        margin-bottom: 10px;
+        border-radius: 0px !important;
     }
 
     .mobile-text {

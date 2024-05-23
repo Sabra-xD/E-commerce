@@ -106,7 +106,7 @@ export const signInWithEmailAndPasswordController = createAsyncThunk(
 
 
 
-
+//Authentication
 export const signInWithGoogle = async (dispatch) => {
   try {
     const response = await signInWithPopup(auth, GoogleProvider);
@@ -171,6 +171,7 @@ export const createAccount =  (email, password, confirmPass, displayName) => asy
           photoURL: '',
           uid: response.user.uid,
           orderHistory: [],
+          deliveryInfo: {},
           idToken: response.user.accessToken,
         }
       };
