@@ -23,6 +23,10 @@ yarn-debug.log*
 yarn-error.log*
 
 
-Server/key/
-Server/.env/
-Server/node_modules/
+Backend/key/
+Backend/.env/
+Backend/node_modules/
+Backend/package-lock.json
+
+Frontend/node_modules
+Frontend/package-lock.json
