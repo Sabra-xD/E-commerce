@@ -24,7 +24,8 @@ export const userSlice = createSlice({
       if (action.payload.user === null) {
         state.user = null;
       } else {
-        const { displayName, email, photoURL, uid, idToken, userRoles,orderHistory } = action.payload.user;
+        const { displayName, email, photoURL, uid, idToken, userRoles,orderHistory,deliveryInfo } = action.payload.user;
+        console.log("The displayName when setting user: ",displayName);
         const userData = {
           displayName,
           email,
@@ -33,9 +34,11 @@ export const userSlice = createSlice({
           tokenId: idToken,
           photo: photoURL,
           orderHistory: orderHistory,
+          deliveryInfo: deliveryInfo,
         };
         saveUserInfo(userData);
         state.user = userData;
+        console.log("The userData we are saving in the state: ",userData);
       }
     },
     signInSuccess: (state, action) => {
@@ -67,11 +70,10 @@ export const signInWithEmailAndPasswordController = createAsyncThunk(
   'auth/signIn',
   async ({ email, password }, { dispatch }) => {
     try {
-      // Default Authentication in Firebase
+
       const res = await signInWithEmailAndPassword(auth, email, password);
 
-      // Fetching userInfo from the fireStore (no dispatch here)
-      const userInfo = await fetchUserInfo(res.user); // Assuming `res` is available from the previous line
+      const userInfo = await fetchUserInfo(res.user); 
 
       if (!userInfo) {
         dispatch(signInError('Something went wrong'));
@@ -86,7 +88,9 @@ export const signInWithEmailAndPasswordController = createAsyncThunk(
           photoURL: '',
           uid: userInfo.uid,
           orderHistory: userInfo.orderHistory,
+          deliveryInfo: userInfo.deliveryInfo,
           idToken: res.user.accessToken,
+
         }
       };
 

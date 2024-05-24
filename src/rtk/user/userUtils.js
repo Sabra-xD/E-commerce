@@ -1,8 +1,9 @@
 
 import { collection, doc, updateDoc,query,getDocs, where } from "firebase/firestore";
-import { firestore } from "../../firebase/utils";
+import { fetchUserInfo, firestore } from "../../firebase/utils";
+import { setUser } from "./userSlice";
 
-export const updateUserDeliveryInfo = (deliveryInfo,user) =>{
+export const updateUserDeliveryInfo = (deliveryInfo,user) => (dispatch)=>{
 
     return new Promise(async(resolve,reject)=>{
         try{
@@ -12,15 +13,17 @@ export const updateUserDeliveryInfo = (deliveryInfo,user) =>{
                 throw new Error("No document found for the user");
             }
             const userDoc = querySnapshot.docs[0];
-            console.log("The userDOC.id: ",userDoc.id);
             const userRef = doc(firestore, "users", userDoc.id);
-            console.log("The user ref is: ", userRef);
             await updateDoc(userRef, {
-                deliveryInfo: {
-                    city:"such your mum",
+                deliveryInfo: deliveryInfo,
+            }).then(async ()=>{
+                try{
+                    const response =  await fetchUserInfo(user);
+                    dispatch(setUser({user:response}));
+                }catch(error){
+                    console.log("Error when trying to fetch User Info: ",error);
                 }
-            }).then(res=>{
-                console.log("The updateDoc response: ",res);
+           
             });
             resolve();
         }catch(error){
@@ -29,35 +32,3 @@ export const updateUserDeliveryInfo = (deliveryInfo,user) =>{
     })
 }
 
-
-// export const updateUserOrderHistory = (orderID,totalNum,totalPrice ,user) => {
-//     console.log("The user we are updating: ", user);
-//     return new Promise(async (resolve, reject) => {
-//         try {
-//             console.log("Before the getDocs");
-//             console.log("The user uid: ",user.uid);
-//             const q = query(collection(firestore, "users"), where("uid", "==", user.uid));
-//             const querySnapshot = await getDocs(q);
-//             console.log("After the getDocs");
-//             if (querySnapshot.empty) {
-//                 throw new Error("No document found for the user");
-//             }
-
-//             // Assume the uid is unique, so there should be only one document
-//             const userDoc = querySnapshot.docs[0];
-//             console.log("The userDOC.id: ",userDoc.id);
-//             const userRef = doc(firestore, "users", userDoc.id);
-//             console.log("The user ref is: ", userRef);
-
-//             await updateDoc(userRef, {
-//                 orderHistory: arrayUnion({orderID,totalNum,totalPrice}),
-//             });
-//             console.log("Order history updated successfully");
-//             resolve();
-//         } catch (error) {
-//             console.log("Error in updating order history: ", error);
-//             reject(error);
-//         }
-//     });
-// }
-  

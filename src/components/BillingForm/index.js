@@ -3,13 +3,13 @@ import FormInput from '../Form/FormInput/index';
 import Button from '../Form/Button/index';
 import './styles.scss';
 import { updateUserDeliveryInfo } from '../../rtk/user/userUtils';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { selectCurrentUser } from '../../rtk/user/userSlice';
 import ReactFlagsSelect from 'react-flags-select';
 
 const BillingForm = () => {
     const user = useSelector(selectCurrentUser);
-    
+    const dispatch = useDispatch();
     const [formData, setFormData] = useState({
         fullName: '',
         address: '',
@@ -33,7 +33,7 @@ const BillingForm = () => {
         e.preventDefault();
         if (validateForm()) {
             console.log("The submission was pressed, now calling the function");
-            updateUserDeliveryInfo(formData, user);
+            dispatch(updateUserDeliveryInfo(formData, user));
         } else {
             console.log("Please fill out all fields.");
         }

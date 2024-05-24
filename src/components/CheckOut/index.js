@@ -83,6 +83,7 @@ const CheckOut = () => {
           <td colSpan="4" style={{ border: 'none' }}> 
            
            <p>Your Total is: {totalPrice}</p>
+           {user?.deliveryInfo ? (<p>Delivering To</p>) : null}
             <div className="button-container">
             <Button onClick={()=>{
                 navigator('/search');
