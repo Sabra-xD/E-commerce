@@ -6,10 +6,22 @@ import { updateUserDeliveryInfo } from '../../rtk/user/userUtils';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectCurrentUser } from '../../rtk/user/userSlice';
 import ReactFlagsSelect from 'react-flags-select';
+import { useNavigate, useLocation } from 'react-router-dom';
+import LoadingSpinner from '../LoadingSpinner';
+import { fetchData } from '../../customHooks/useStripe';
 
 const BillingForm = () => {
+
+    //Controls whether we go for the my-account or the check out.
+    const location = useLocation();
+    const routedState = location.state;
+    const noAddress = routedState ? routedState.noAddress : null;
+    const products = routedState ? routedState.products : null;
+
     const user = useSelector(selectCurrentUser);
+    const [loading,setLoading] = useState(false);
     const dispatch = useDispatch();
+    const navigator = useNavigate();
     const [formData, setFormData] = useState({
         fullName: '',
         address: '',
@@ -29,18 +41,37 @@ const BillingForm = () => {
         return Object.values(formData).every(field => field.trim() !== '');
     };
 
-    const handleOnSubmit = (e) => {
+    const handleOnSubmit = async(e) => {
         e.preventDefault();
         if (validateForm()) {
-            console.log("The submission was pressed, now calling the function");
-            dispatch(updateUserDeliveryInfo(formData, user));
+            try{
+
+                setLoading(true);
+                
+                await dispatch(updateUserDeliveryInfo(formData, user));
+                
+                if(noAddress && products) {
+                    await fetchData(products);
+                    setLoading(false);
+                } else {
+                    navigator("/myaccount");
+                }
+
+                setLoading(false);
+            }catch(error){
+                setLoading(false);
+                //We should create an errors page here.
+                console.log("The error when dispatching the updateUserInfo: ",error);
+            }
+            
         } else {
             console.log("Please fill out all fields.");
         }
     };
 
     return (
-        <div className="form-container1">
+        loading ? (<LoadingSpinner/>) :
+            (<div className="form-container1">
             <form className="billing-form" onSubmit={handleOnSubmit}>
                 <p className="form-description default-text">Please enter your delivery information</p>
                 <p className="form-description mobile-text">Delivery Information</p>
@@ -62,6 +93,7 @@ const BillingForm = () => {
                     onChange={handleInputChange}
                     required
                 />
+
                 <FormInput
                     type="text"
                     name="city"
@@ -71,10 +103,11 @@ const BillingForm = () => {
                     onChange={handleInputChange}
                     required
                 />
+
                 <FormInput
                     type="text"
                     name="state"
-                    label="State"
+                    label="State/Governate"
                     placeholder="Enter your state"
                     value={formData.state}
                     onChange={handleInputChange}
@@ -115,6 +148,8 @@ const BillingForm = () => {
                 <Button type="submit">Submit</Button>
             </form>
         </div>
+)
+
     );
 };
 

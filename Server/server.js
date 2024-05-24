@@ -69,16 +69,49 @@
           },
           quantity: 1,
         })),
-        //Re-route the user to something decent.
-        success_url: `${process.env.CLIENT_URL}/success`,
-        cancel_url: `${process.env.CLIENT_URL}/fail`,
-      })
-      await deleteDocuments(productIds);
-      res.json({ url: session.url })
+        // Redirect the user to different URLs based on success or cancelation
+        success_url: `${process.env.CLIENT_URL}/success/{CHECKOUT_SESSION_ID}`,
+        cancel_url: `${process.env.CLIENT_URL}/cancel`,
+      });
+      console.log("The session url: ",session.url);
+      res.json({ url: session.url });
     } catch (e) {
-      res.status(500).json({ error: e.message })
+      res.status(500).json({ error: e.message });
     }
-  })
+  });
+  
+  // Route to handle successful payment
+  app.post("/success/:session_id", async (req, res) => {
+    try {
+      const { session_id } = req.params;
+      console.log("The req: ",req.body);
+      
+      const session = await stripe.checkout.sessions.retrieve(session_id);
+  
+      if (session.payment_status === 'paid') {
+
+        //So we need to access the order, send its documentIDs and delete them.
+        
+        const productIds = req.body.products.map(item => item.documentID);
+        await deleteDocuments(productIds);
+        res.status(200);
+        console.log("The item was found, bought and deleted");
+
+      } else {
+
+        res.status(400).json({ error: 'Payment not completed successfully' });
+
+      }
+    } catch (e) {
+      res.status(500).json({ error: e.message });
+    }
+  });
+  
+  // Route to handle canceled payment
+  app.get("/cancel", (req, res) => {
+    res.redirect(`${process.env.CLIENT_URL}/cancel`);
+  });
+  
   
   app.listen(5000);
   

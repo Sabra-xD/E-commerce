@@ -23,7 +23,6 @@ import CheckOut from './components/CheckOut';
 import PaymentPage from './pages/PaymentPage';
 import Sucess from './components/Response/Sucess';
 import Fail from './components/Response/Fail';
-import Orders from './components/Orders';
 import DashboardLayOut from './layouts/DashboardLayOut';
 import MyAccount from './pages/MyAccount';
 import OrderDetails from './components/OrderDetails';
@@ -151,7 +150,7 @@ function App() {
         </MainLayout>
       }/>
       
-      <Route path="success" element={
+      <Route path="success/:sessionID" element={
         <MainLayout>
                   <Sucess />
         </MainLayout>

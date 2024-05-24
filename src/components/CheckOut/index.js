@@ -3,8 +3,10 @@ import './styles.scss';
 import { checkIfExist,getCartCount, getCartList, getTotalPrice, removeCartItem } from '../../rtk/cart/cartSlice';
 import Button from '../Form/Button';
 import { useNavigate } from 'react-router-dom';
-import { saveOrder } from '../../rtk/orders/ordersUtils';
 import { selectCurrentUser } from '../../rtk/user/userSlice';
+import { fetchData } from '../../customHooks/useStripe';
+import { useState } from 'react';
+import LoadingSpinner from '../LoadingSpinner';
 
 const CheckOut = () => {
     const products = useSelector(getCartList);
@@ -14,33 +16,11 @@ const CheckOut = () => {
     console.log("The user after the selector: ",user);
     const navigator = useNavigate();
     const dispatch = useDispatch();
+    const [loading,isLoading] = useState(false);
 
-    const fetchData = async (products) => {
-        try {
-          const response = await fetch("http://localhost:5000/create-checkout-session", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              items: products,
-            }),
-          });
-  
-          if (!response.ok) {
-            console.log("Error was thrown");
-            throw new Error(await response.text());
-          }
-          const data = await response.json();
-          window.location.href = data.url;
-        } catch (error) {
-            console.log("The error in the fetch function is: ",error);
-        }
-      };
-    
+
 
     const handleActionButton = (product) => {
-        console.log("The product we are deleting is: ",product);
         if(checkIfExist(product,products)){
             dispatch(removeCartItem({
                 productName:product.productName,
@@ -52,8 +32,9 @@ const CheckOut = () => {
     }
 
     return(
+      
+      loading ? (<LoadingSpinner/>) : (
         <div className='table-wrapper'>
-
         {cartListCount > 0 ? (<>
             <table className="product-table">
                 <thead>
@@ -83,17 +64,32 @@ const CheckOut = () => {
           <td colSpan="4" style={{ border: 'none' }}> 
            
            <p>Your Total is: {totalPrice}</p>
-           {user?.deliveryInfo ? (<p>Delivering To</p>) : null}
+           {user?.deliveryInfo ? (
+
+            <div>
+              <p>Delivery Information: </p>
+              <p>Recepient Name: {user.deliveryInfo.fullName}</p>
+              <p>Phone Number: {user.deliveryInfo.phoneNumber}</p>
+              <p>Address: {user.deliveryInfo.postalCode}, {user.deliveryInfo.address}, {user.deliveryInfo.city}</p>
+              <p>State/Governate: {user.deliveryInfo.state}, {user.deliveryInfo.country}</p>
+            </div>
+
+           ) : null}
             <div className="button-container">
             <Button onClick={()=>{
                 navigator('/search');
             }}>Continue Shopping</Button>
-            <Button onClick={()=>{
-                console.log("The products we're buying: ",products);
-                // fetchData(products);
-                dispatch(saveOrder(products,totalPrice,user));
+            <Button onClick={async()=>{
+                if(Object.keys(user?.deliveryInfo).length>0){
+                  console.log("Pressing the button");
+                  console.log("The products we got from the getCartList: ",products);
+                  isLoading(true);
+                  await fetchData(products);
+                }else{
+                  //Route us to the billing information page.
+                  navigator('/delivery-information',{state: {noAddress: true, products:products}});
+                }
             }}>Check Out</Button>
-
             </div>
           </td>
         </tr>
@@ -104,10 +100,8 @@ const CheckOut = () => {
         <h1>Your cart is empty</h1>
         </div>
         </>)}
-
-  
-
         </div>
+      )
 
     )
 }  
