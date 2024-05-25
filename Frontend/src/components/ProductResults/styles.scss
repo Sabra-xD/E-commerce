@@ -3,7 +3,12 @@
     height: 30rem;
     border-radius: 10px;
 }
-
+.products {
+    display: flex;
+    height: 50%;
+    align-items: center;
+    justify-content: center;
+}
 .ProductCard img {
 
     width: 100%;

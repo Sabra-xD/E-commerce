@@ -60,7 +60,6 @@ const BillingForm = () => {
                 setLoading(false);
             }catch(error){
                 setLoading(false);
-                //We should create an errors page here.
                 console.log("The error when dispatching the updateUserInfo: ",error);
             }
             

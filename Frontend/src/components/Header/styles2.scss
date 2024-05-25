@@ -15,9 +15,12 @@
             position: relative;
             align-items: center;
             left: 2.5%;
-
+            width: auto;
+            
             img {
                 margin: 0 auto;
+                width: auto;
+
                 height: 100%; // Ensure logo fills the height of the header
             }
         }

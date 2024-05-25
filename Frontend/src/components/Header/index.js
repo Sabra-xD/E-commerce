@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import './styles2.scss';
-import Logo from './../../assets/logo.png';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { logOut } from '../../rtk/user/userSlice';
@@ -39,14 +38,11 @@ const Header = () => {
               <Link to="/search">Search</Link>
               <Link to="/checkout">Your Cart: ({cartCount})</Link>
               <Link  to="/myaccount">My Account</Link>
-              <Link style={{color:"red"}} onClick={()=>{
+              <Link to="/" style={{color:"red"}} onClick={()=>{
                 dispatch(logOut).then(naviate('/'));
               }}>Log Out</Link>
             </>
         )
-      
-
-
     )
   }
 
@@ -85,7 +81,7 @@ const Header = () => {
     <header className="header">
       <div className="wrap">
         <div className="logo">
-          <img src={Logo} alt="SimpleTut Logo" />
+          <img src="https://www.x-cart.com/img/16591/ecommerce-p800.jpg" alt="Logo" />
         </div>
      
         {renderNavigation()}

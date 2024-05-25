@@ -13,6 +13,7 @@ const Login = () => {
     const signInSucess = useSelector(selectSignInSuccess);
     const navigator = useNavigate();
 
+
     const signInError = useSelector(state=>state.user.signInError);
 
     const [email,setEmail] = useState('');
@@ -34,10 +35,9 @@ const Login = () => {
         }
     }
 
-    const handleSignInWithGoogle = ()=>{
-        console.log("Dispatched");
-        dispatch(signInWithGoogle);
-
+    const handleSignInWithGoogle = async()=>{
+        await dispatch(signInWithGoogle);
+        navigator("/");
         // ToDO: Naviagte to home page once done.
     }
 

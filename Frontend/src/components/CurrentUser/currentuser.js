@@ -10,8 +10,6 @@ const { selectCurrentUser } = require("../../rtk/user/userSlice");
 const CurrentUser = ()=>{
 
     const {currentUser, timerExpired} = useSelectorWithDelay(selectCurrentUser,3000);
-    // const currentUser = useSelector(selectCurrentUser);
-    console.log("The current user is after the selected delay is: ",currentUser, "did time out? ",timerExpired);
 
     const navigator = useNavigate();
 

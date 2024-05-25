@@ -15,27 +15,18 @@ export const productSlice = createSlice({
     reducers: {
        
         setProduct:(state,action)=>{
-            //Setting the product data when fetching it by ID.
-            console.log("The action.payload is: ",action.payload);
                 state.product = action.payload;
         },
 
-        addProduct:(state,action) => {
-            //Adding a product to the list.
-            // console.log("The state products: ",state.products,"The state product we are pushing: ",action.payload);
-            // state.products.push(action.payload);
-            // saveProducts(state.products);
-        },
         getProducts: (state,action) => {
             state.products = action.payload['products'];
-            // console.log("The action.payload is: ",action.payload, "The product is: ",action.payload['products']);
         }
     }
 
 });
 
 
-export const  {addProduct,getProducts,setProduct} = productSlice.actions;
+export const  {getProducts,setProduct} = productSlice.actions;
 export default productSlice.reducer;
 
 export const getAllProducts = (state) => state.product?.products;
@@ -48,10 +39,8 @@ export const fetchProductWithID = (user,documentID) => async(dispatch) => {
     try{
 
         if(user?.uid){
-            console.log("Inside the if condition")
             //The payload sohuld be the documentID
             const product = await handleFetchProductWithID(documentID);
-            console.log("The returned product: ",product);
             //Set the state with that product
             dispatch(setProduct(product));
         }
@@ -68,15 +57,11 @@ export const fetchProductWithID = (user,documentID) => async(dispatch) => {
 
 export const fetchProductsController = (user, payload) => async (dispatch) => {
     try {
-      console.log("The payload is: ", payload);
-      console.log("The user is: ", user);
+ 
       if (user?.uid) {
-        console.log("Inside the if condition");
         handleFetchProducts(payload)
           .then(products => {
-            console.log("The products we got back inside the fetch: ", products);
-            // const { data } = products;
-            // console.log("The data we got back inside the fetchProductController: ", data)
+    
 
             dispatch(getProducts({products}));
 
@@ -99,10 +84,6 @@ export const addProductController = (product,user) => async(dispatch) => {
     try{
         await handleAddProduct(product).then(
             ()=>{
-                //Adding the product to the state
-                dispatch(addProduct(product));
-                
-                //Refetching the products.
                 dispatch(fetchProductsController(user,{filterType:''}));
             }
         ).catch(err=>{
@@ -121,8 +102,6 @@ export const deleteProductController = (user,productID) => async(dispatch) => {
         const status = await deleteProduct(productID);
         if(status){
             dispatch(fetchProductsController(user,{filterType:''}));
-        }else{
-            console.log("Status was False");
         }
 
     }catch(error){  
@@ -131,7 +110,6 @@ export const deleteProductController = (user,productID) => async(dispatch) => {
 }
 
 const saveProducts = (products) => {
-    console.log("The products we're saving", products);
     const productsJSON = JSON.stringify(products);
     localStorage.setItem("products", productsJSON);
 };

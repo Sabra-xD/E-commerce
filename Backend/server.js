@@ -53,8 +53,11 @@
 
   app.post("/create-checkout-session", async (req, res) => {
     try {
-      const productIds = req.body.items.map(item => item.documentID); // Extract document IDs
+      const productIds = req.body.items.map(item => item.documentID); 
+      console.log("The request body items: ",req.body.items);
       const products = await fetchDocuments(productIds);
+      console.log("The productIDs: ",productIds);
+      console.log("The products: ",products);
   
       const session = await stripe.checkout.sessions.create({
         payment_method_types: ["card"],
@@ -81,32 +84,29 @@
   });
   
   // Route to handle successful payment
-  app.post("/success/:session_id", async (req, res) => {
-    try {
-      const { session_id } = req.params;
-      console.log("The req: ",req.body);
-      
-      const session = await stripe.checkout.sessions.retrieve(session_id);
-  
-      if (session.payment_status === 'paid') {
+app.post("/success/:session_id", async (req, res) => {
+  try {
+    const { session_id } = req.params;
+    console.log("The req: ", req.body);
+    
+    const session = await stripe.checkout.sessions.retrieve(session_id);
 
-        //So we need to access the order, send its documentIDs and delete them.
-        
-        const productIds = req.body.products.map(item => item.documentID);
-        await deleteDocuments(productIds);
-        res.status(200);
-        console.log("The item was found, bought and deleted");
+    if (session.payment_status === 'paid') {
+      // Access the order, send its documentIDs and delete them.
+      const productIds = req.body.products.map(item => item.documentID);
+      console.log("The productIDS in the success: ", productIds);
+      await deleteDocuments(productIds);
 
-      } else {
-
-        res.status(400).json({ error: 'Payment not completed successfully' });
-
-      }
-    } catch (e) {
-      res.status(500).json({ error: e.message });
+      return res.status(200).json({ message: 'Payment successful and products deleted' });
+    } else {
+      return res.status(400).json({ error: 'Payment not completed successfully' });
     }
-  });
-  
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+
   // Route to handle canceled payment
   app.get("/cancel", (req, res) => {
     res.redirect(`${process.env.CLIENT_URL}/cancel`);

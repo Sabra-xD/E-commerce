@@ -25,7 +25,6 @@ export const userSlice = createSlice({
         state.user = null;
       } else {
         const { displayName, email, photoURL, uid, idToken, userRoles,orderHistory,deliveryInfo } = action.payload.user;
-        console.log("The displayName when setting user: ",displayName);
         const userData = {
           displayName,
           email,
@@ -36,9 +35,8 @@ export const userSlice = createSlice({
           orderHistory: orderHistory,
           deliveryInfo: deliveryInfo,
         };
-        saveUserInfo(userData);
+        saveUserInfo(action.payload.user);
         state.user = userData;
-        console.log("The userData we are saving in the state: ",userData);
       }
     },
     signInSuccess: (state, action) => {
@@ -79,7 +77,6 @@ export const signInWithEmailAndPasswordController = createAsyncThunk(
         dispatch(signInError('Something went wrong'));
         return false;
       }
-      console.log("The userInfo: ",userInfo);
       const userData = {
         user: {
           displayName: userInfo.displayName,
@@ -95,7 +92,6 @@ export const signInWithEmailAndPasswordController = createAsyncThunk(
       };
 
       dispatch(setUser(userData));
-      console.log("The orderHistory we are setting: ",userInfo.orderHistory);
       dispatch(setOrderHistory(userInfo.orderHistory));
       
       dispatch(signInSuccess(true));
@@ -142,12 +138,13 @@ export const readUserInfo = (dispatch) => {
 
 export const logOut = async (dispatch) => {
   try {
-    await auth.signOut();
     localStorage.clear();
     dispatch(setUser({ user: null }));
     dispatch(signInSuccess(false));
     dispatch(signUpSucess(false));
     dispatch(clearCart());
+    await auth.signOut();
+   
   } catch (error) {
     console.error("Error in the LogOut: ", error);
   }

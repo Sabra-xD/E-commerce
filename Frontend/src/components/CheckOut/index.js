@@ -13,12 +13,9 @@ const CheckOut = () => {
     const cartListCount = useSelector(getCartCount);
     const totalPrice = useSelector(getTotalPrice);
     const user = useSelector(selectCurrentUser);
-    console.log("The user after the selector: ",user);
     const navigator = useNavigate();
     const dispatch = useDispatch();
     const [loading,isLoading] = useState(false);
-
-
 
     const handleActionButton = (product) => {
         if(checkIfExist(product,products)){
@@ -30,6 +27,8 @@ const CheckOut = () => {
             }));
         }
     }
+
+   
 
     return(
       
@@ -81,12 +80,10 @@ const CheckOut = () => {
             }}>Continue Shopping</Button>
             <Button onClick={async()=>{
                 if(Object.keys(user?.deliveryInfo).length>0){
-                  console.log("Pressing the button");
-                  console.log("The products we got from the getCartList: ",products);
                   isLoading(true);
+
                   await fetchData(products);
                 }else{
-                  //Route us to the billing information page.
                   navigator('/delivery-information',{state: {noAddress: true, products:products}});
                 }
             }}>Check Out</Button>

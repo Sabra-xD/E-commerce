@@ -16,17 +16,24 @@ const Sucess = () => {
   const user = useSelector(selectCurrentUser);
   const dispatch = useDispatch();
   const [loading,isLoading] = useState(false);
+
+  
   const sucessFunction = async() => {
-    console.log("The products we are supposed to be sending: ",products);
     await dispatch(fetchSuccess(sessionID,products,totalPrice,user));
     isLoading(false);
   }
 
   useEffect(() => {
     isLoading(true);
-    sucessFunction();
-    isLoading(false);
-  }, []); 
+    if(products.length>0 && totalPrice > 0){
+
+      sucessFunction();
+      isLoading(false);  
+    
+    }
+ 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [products]); 
 return(
 
   loading ? <LoadingSpinner /> :     <div className='customWrapper'>

@@ -5,12 +5,16 @@ import './styles.scss';
 import { fetchProductsController } from '../../rtk/products/productSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectCurrentUser } from '../../rtk/user/userSlice';
+import { useNavigate } from 'react-router-dom';
 
 const Directory = props => {
   const dispatch = useDispatch();
   const user = useSelector(selectCurrentUser);
+  const navigator = useNavigate();
   useEffect(()=>{
+    
     dispatch(fetchProductsController(user,{filterType:''}));
+
   // eslint-disable-next-line react-hooks/exhaustive-deps
   },[user])
     return (
@@ -25,11 +29,18 @@ const Directory = props => {
             }}
           >
 
-            <button className="button" id='female'>Shop Women</button>
+            <button onClick={()=>{
+              navigator("/search/womens");
+            }} className="button" id='female'>
+              Shop Women
+            </button>
 
           </div>
 
           <div
+            onClick={()=>{
+              navigator("/search/mens");
+            }}
             className="item"
             style={{
               backgroundImage: `url(${ShopMen})`

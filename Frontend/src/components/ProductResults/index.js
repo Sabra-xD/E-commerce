@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Product from './Product';
 import FormSelect from '../Form/FormSelect';
 import LoadMore from '../LoadMore/LoadMore';
-// import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 
 
@@ -15,9 +15,8 @@ const ProductResults = () => {
 
     const dispatch = useDispatch();
     const user = useSelector(selectCurrentUser);
-    console.log("The user RIGHT AFTER the selector: ",user);
 
-    // const {filterTypeFromLink} = useParams();
+    const {filterTypeFromLink} = useParams();
 
 
     const [filterType, setFilterType] = useState('');
@@ -41,6 +40,13 @@ const ProductResults = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     },[filterType,user]);
 
+    useEffect(()=>{
+      if(filterTypeFromLink!==""){
+        setFilterType(filterTypeFromLink)
+      }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[]);
+
 
     useEffect(()=>{
     },[data]);
@@ -50,9 +56,9 @@ const ProductResults = () => {
 
       return (
         <div className="products">
-          <p>
-            No search results.
-          </p>
+          <h4>
+            No products to show
+          </h4>
         </div>
       );
     }

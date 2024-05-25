@@ -7,10 +7,8 @@ const OrderDetails = () => {
     const {orderID} = useParams();
     const [order,setOrder] = useState({});
     const fetchOrder = async()=>{
-        console.log("The orderID we got from the params: ",orderID);
         await fetchOrderWithID(orderID).then(
             (order)=>{
-                console.log("The order now is: ",order);
                 setOrder(order);
             }
         ).catch(error=>{

@@ -1,10 +1,11 @@
 import { clearCart } from "../rtk/cart/cartSlice";
-import { saveOrder } from "../rtk/orders/orderSlice";
+import { saveOrder } from "../rtk/orders/ordersUtils";
+
+const baseURL = 'http://localhost:5000';
 
 export const fetchData = async (products) => {
-  console.log("The products inside fetchData: ",products);
     try {
-      const response = await fetch("http://localhost:5000/create-checkout-session", {
+      const response = await fetch(`${baseURL}/create-checkout-session`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -26,11 +27,10 @@ export const fetchData = async (products) => {
   };
 
 
-
-export const fetchSuccess = (sessionID, products,totalPrice,user) => async (dispatch)=>{
-  console.log("The products we are sending: ",products);
+  export const fetchSuccess = (sessionID, products, totalPrice, user) => async (dispatch) => {
+    
     try {
-      const response = await fetch(`http://localhost:5000/success/${sessionID}`, {
+      const response = await fetch(`${baseURL}/success/${sessionID}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -40,17 +40,17 @@ export const fetchSuccess = (sessionID, products,totalPrice,user) => async (disp
         }),
       });
   
+
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
-          dispatch(saveOrder(products,totalPrice,user));
-          //Clear the cart
-          dispatch(clearCart());
-          //We need to re-fetch the products to update the ones we've right now.
-          
+  
+  
+      await dispatch(saveOrder(products, totalPrice, user));
+      dispatch(clearCart());
+  
     } catch (error) {
       console.log("Error when fetching success data: ", error);
     }
-
-};
+  };
   
