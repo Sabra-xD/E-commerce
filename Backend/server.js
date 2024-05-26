@@ -9,7 +9,7 @@
   app.use(express.json()); 
   app.use(
     cors({
-      origin: "http://localhost:3000",
+      origin: "*",
     })
   )
   
@@ -44,7 +44,6 @@
       try {
         const docRef = firestore.collection("products").doc(id);
         await docRef.delete();
-        console.log("Document deleted:", id);
       } catch (error) {
         console.error("Error deleting document:", id, error);
       }
@@ -54,11 +53,8 @@
   app.post("/create-checkout-session", async (req, res) => {
     try {
       const productIds = req.body.items.map(item => item.documentID); 
-      console.log("The request body items: ",req.body.items);
       const products = await fetchDocuments(productIds);
-      console.log("The productIDs: ",productIds);
-      console.log("The products: ",products);
-  
+     
       const session = await stripe.checkout.sessions.create({
         payment_method_types: ["card"],
         mode: "payment",
@@ -87,14 +83,12 @@
 app.post("/success/:session_id", async (req, res) => {
   try {
     const { session_id } = req.params;
-    console.log("The req: ", req.body);
     
     const session = await stripe.checkout.sessions.retrieve(session_id);
 
     if (session.payment_status === 'paid') {
       // Access the order, send its documentIDs and delete them.
       const productIds = req.body.products.map(item => item.documentID);
-      console.log("The productIDS in the success: ", productIds);
       await deleteDocuments(productIds);
 
       return res.status(200).json({ message: 'Payment successful and products deleted' });
@@ -108,7 +102,7 @@ app.post("/success/:session_id", async (req, res) => {
 
 
   // Route to handle canceled payment
-  app.get("/cancel", (req, res) => {
+  app.get("/fail", (req, res) => {
     res.redirect(`${process.env.CLIENT_URL}/cancel`);
   });
   
