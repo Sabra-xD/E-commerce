@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { clearCart } from "../cart/cartSlice";
-import { auth, fetchUserInfo, GoogleProvider, handleUserProfile } from "../../firebase/utils";
+import { auth, fetchUserInfo, firestore, GoogleProvider, handleUserProfile } from "../../firebase/utils";
 import {
   signInWithPopup,
   createUserWithEmailAndPassword,
@@ -8,6 +8,7 @@ import {
   sendPasswordResetEmail,
 } from "firebase/auth";
 import { setOrderHistory } from "../orders/orderSlice";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 
 export const userSlice = createSlice({
   name: "user",
@@ -62,6 +63,7 @@ export const selectCurrentUser = (state) => {
   return state.user.user
 };
 
+//Authentication
 
 
 export const signInWithEmailAndPasswordController = createAsyncThunk(
@@ -104,52 +106,38 @@ export const signInWithEmailAndPasswordController = createAsyncThunk(
   }
 );
 
-
-
-//Authentication
 export const signInWithGoogle = async (dispatch) => {
   try {
     const response = await signInWithPopup(auth, GoogleProvider);
+    const user = response.user;
+    const userDocRef = doc(firestore, "users", user.uid);
+    const userDoc = await getDoc(userDocRef);
+    if (userDoc.exists()) {
+      const userData = userDoc.data();
+      dispatch(setUser(userData));
+    } else {
+      
+      const newUser = {
+        uid: user.uid,
+        displayName: user.displayName,
+        email: user.email,
+        photoURL: user.photoURL,
+        createdAt: new Date(),
+        userRoles: ['user'], 
+        orderHistory: [], 
+        deliveryInfo: {} 
+      };
+      await setDoc(userDocRef, newUser);
+      dispatch(setUser(newUser));
+    }
+
     dispatch(signInSuccess(true));
     dispatch(signUpSucess(true));
-    dispatch(setUser(response));
   } catch (error) {
     console.error("Error signing in with Google:", error);
+    
   }
 };
-
-const saveUserInfo = (userData) => {
-  console.log("The userData we're saving: ",userData);
-  localStorage.setItem("userData", JSON.stringify(userData));
-};
-
-export const readUserInfo = (dispatch) => {
-  const userDataString = localStorage.getItem("userData");
-  const userData = JSON.parse(userDataString);
-  console.log("The read user info is: ",userData);
-
-
-  if (userData) {
-    dispatch(setUser({ user: userData }));
-    return true;
-  }
-  return false;
-};
-
-export const logOut = async (dispatch) => {
-  try {
-    localStorage.clear();
-    dispatch(setUser({ user: null }));
-    dispatch(signInSuccess(false));
-    dispatch(signUpSucess(false));
-    dispatch(clearCart());
-    await auth.signOut();
-   
-  } catch (error) {
-    console.error("Error in the LogOut: ", error);
-  }
-};
-
 
 export const createAccount =  (email, password, confirmPass, displayName) => async (dispatch) => {
   if(password!==confirmPass){
@@ -193,6 +181,35 @@ export const createAccount =  (email, password, confirmPass, displayName) => asy
   }
 };
 
+const saveUserInfo = (userData) => {
+  localStorage.setItem("userData", JSON.stringify(userData));
+};
+
+export const readUserInfo = (dispatch) => {
+  const userDataString = localStorage.getItem("userData");
+  const userData = JSON.parse(userDataString);
+
+
+  if (userData) {
+    dispatch(setUser({ user: userData }));
+    return true;
+  }
+  return false;
+};
+
+export const logOut = async (dispatch) => {
+  try {
+    localStorage.clear();
+    dispatch(setUser({ user: null }));
+    dispatch(signInSuccess(false));
+    dispatch(signUpSucess(false));
+    dispatch(clearCart());
+    await auth.signOut();
+   
+  } catch (error) {
+    console.error("Error in the LogOut: ", error);
+  }
+};
 
 export const resetPassword = async(email) =>{
   try{

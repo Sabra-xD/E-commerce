@@ -19,11 +19,11 @@ const Product = ({
 
 
     return(
-        <div className="ProductCard" onClick={()=>{
+        <div className="ProductCard">
+            <img src={productPhoto} alt="productPhoto"  onClick={()=>{
             //Navigate to the product-details page
             navigator(`/product-details/${documentID}`);
-        }}>
-            <img src={productPhoto} alt="productPhoto" />
+        }}/>
             <p>{productName}</p>
             <p>{productPrice}$</p>
             

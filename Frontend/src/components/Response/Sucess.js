@@ -10,43 +10,36 @@ import { selectCurrentUser } from '../../rtk/user/userSlice';
 import LoadingSpinner from '../LoadingSpinner';
 
 const Sucess = () => {
-  const {sessionID} = useParams();
+  const { sessionID } = useParams();
   const products = useSelector(getCartList);
   const totalPrice = useSelector(getTotalPrice);
   const user = useSelector(selectCurrentUser);
   const dispatch = useDispatch();
-  const [loading,isLoading] = useState(false);
-
-  
-  const sucessFunction = async() => {
-    await dispatch(fetchSuccess(sessionID,products,totalPrice,user));
-    isLoading(false);
-  }
+  const [loading, isLoading] = useState(true);
 
   useEffect(() => {
-    isLoading(true);
-    if(products.length>0 && totalPrice > 0){
+    if (products.length > 0 && totalPrice > 0) {
+      const sucessFunction = async () => {
+        await dispatch(fetchSuccess(sessionID, products, totalPrice, user));
+        isLoading(false);
+      };
 
       sucessFunction();
-      isLoading(false);  
-    
     }
- 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [products]); 
-return(
-
-  loading ? <LoadingSpinner /> :     <div className='customWrapper'>
-  <div className="success-container">
-<h3>Your purchase was successful!</h3>
-<div className="check-mark-container">
-<FontAwesomeIcon icon={faCheckCircle} className="check-mark-icon" />
-</div>
-</div>
-</div>
- 
+  }, []);
   
-);
+  return (
+    loading ? <LoadingSpinner /> :
+      <div className='customWrapper'>
+        <div className="success-container">
+          <h3>Your purchase was successful!</h3>
+          <div className="check-mark-container">
+            <FontAwesomeIcon icon={faCheckCircle} className="check-mark-icon" />
+          </div>
+        </div>
+      </div>
+  );
 }
 
 export default Sucess;

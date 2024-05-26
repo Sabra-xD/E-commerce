@@ -14,7 +14,7 @@ const AdminNavBar = () => {
     return(
 
 <div className="sideBar">
-        <p>Circular Image</p>
+
                 
                 <h3>{currentUser?.displayName}</h3> 
     
@@ -25,13 +25,10 @@ const AdminNavBar = () => {
                 <hr className="divider"/>
     
                 <Button onClick={()=>{
-                    //Go to the billing information page
                     navigator("/delivery-information");
                 }}>Update Delivery information</Button>
     
-                <hr className="divider"/>
     
-                <Button>Sign Out</Button>
                 
         </div>
             

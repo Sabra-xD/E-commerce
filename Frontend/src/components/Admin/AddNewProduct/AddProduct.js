@@ -7,11 +7,14 @@ import FormInput from '../../Form/FormInput';
 import FormSelect from '../../Form/FormSelect';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import Alert from '../../Alert';
 
 const AddProduct = () => {
   const [showForm, setShowForm] = useState(false);
   const user = useSelector(selectCurrentUser);
   const dispatch = useDispatch();
+  const [showAlert, setShowAlert] = useState(false);
+
   const formRef = useRef(null);
 
   const [productCategory, setProductCategory] = useState('mens');
@@ -48,6 +51,10 @@ const AddProduct = () => {
       setProduct(initialProductState);
       setProductCategory('mens');
       setShowForm(false);
+      setShowAlert(true); // Show alert after successful deletion
+      setTimeout(() => {
+          setShowAlert(false); // Hide alert after 1 second
+      }, 1000);
     }
   };
 
@@ -119,6 +126,9 @@ const AddProduct = () => {
           </div>
         </div>
       )}
+
+  {showAlert && <Alert message="Product added successfully!" color="#90EE90"/>}
+
     </>
   );
 };

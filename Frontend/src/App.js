@@ -143,11 +143,9 @@ function App() {
         }/>
 
         <Route path="success/:sessionID" element={
-          <WithAuth>
             <MainLayout>
               <Sucess />
-            </MainLayout>
-          </WithAuth>
+            </MainLayout>        
         }/>
 
         <Route path="cancel" element={

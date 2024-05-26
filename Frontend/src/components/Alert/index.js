@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './styles.scss'; // Import CSS file for styling the alert
 
-const Alert = ({ message }) => {
+const Alert = ({ message,color }) => {
   const [visible, setVisible] = useState(true);
 
   useEffect(() => {
@@ -13,7 +13,7 @@ const Alert = ({ message }) => {
   }, []); 
 
   return (
-    <div className={`alert ${visible ? 'show' : 'hide'}`}>
+    <div className={`alert ${visible ? 'show' : 'hide'}`} style={{backgroundColor:color}}>
       {message}
     </div>
   );

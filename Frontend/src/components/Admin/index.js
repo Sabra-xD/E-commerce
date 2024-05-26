@@ -109,7 +109,7 @@ const Admin = () => {
                         </tr>
                       </tbody>
                     </table>
-                    {showAlert && <Alert message="Product deleted successfully!" />}
+                    {showAlert && <Alert message="Product deleted successfully!"  color="#f44336"/>}
                   </div>
                 </div>
 

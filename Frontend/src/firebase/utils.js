@@ -80,64 +80,20 @@ export const handleAddProduct =  (product) =>{
   })
 }
 
-  // export const handleFetchProducts = async ({filterType,StartDoc,presistProduct=[]}) => {
-  //   try {
-  //     const pageSize = 6;
-  //     const ref = collection(firestore, "products");
-
-  //     const filterQuery = filterType ? where('productCategory', '==', filterType) : null;
-  //     const StartDocQuery = StartDoc ? startAfter(StartDoc) : null;
-  //     const q = query(ref,filterQuery,limit(pageSize));
-      
-
-  //    await getDocs(q).then((snapShot=>{
-  //       const totalCount = snapShot.size;
-  //       const data = [
-  //         ...presistProduct,
-  //         ...snapShot.docs.map(doc=>{
-  //           return{
-  //             ...doc.data(),
-  //             documentID: doc.id,
-            
-  //           }
-  //         })
-  //       ];
-        
-  //       console.log("The product list: ",data,"queryDoc: ",snapShot.docs[totalCount-1],"Total Count: ",totalCount);
-
-  //       return({
-  //         data,
-  //         queryDoc: snapShot.docs[totalCount - 1],
-  //         isLastPage: totalCount < 1
-  //       });
-
-    
-  //     })); 
-    
-      
-  //  } catch (error) {
-  //     console.error("Error fetching products:", error); // Use console.error for more detailed logging
-  //     throw error; // Re-throw the error to allow upper-level handling
-  //   }
-  // };
-
 
   export const handleFetchProductWithID = async (documentID) => {
 
     try {
-      // Reference the document directly using doc
       const productRef = doc(firestore, "products", documentID);
   
-      // Get a document snapshot
       const productSnapShot = await getDoc(productRef);
   
       if (productSnapShot.exists) {
-        // Document found, get data
         const product = productSnapShot.data();
         return product;
       } else {
-        // Document not found, handle the case (optional)
-        return null; // Or throw an error if needed
+        
+        return null;
       }
   
     } catch (error) {
@@ -173,13 +129,12 @@ export const handleAddProduct =  (product) =>{
             }
           })
         ];
-  
-  
         resolve({
           data,
           queryDoc: snapShot.docs[totalCount - 1],
           isLastPage: totalCount < 1
         });
+
       } catch (error) {
         console.error("Error fetching products:", error);
         reject(error);

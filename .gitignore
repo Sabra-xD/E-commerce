@@ -24,7 +24,6 @@ yarn-error.log*
 
 
 
-Backend/key
 Backend/node_modules/
 Backend/package-lock.json
 

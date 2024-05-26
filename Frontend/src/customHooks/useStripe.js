@@ -1,7 +1,7 @@
 import { clearCart } from "../rtk/cart/cartSlice";
 import { saveOrder } from "../rtk/orders/ordersUtils";
 
-const baseURL = 'http://localhost:5000';
+const baseURL = 'https://e-commerce-1-7ti8.onrender.com';
 
 export const fetchData = async (products) => {
     try {
@@ -44,7 +44,6 @@ export const fetchData = async (products) => {
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
-  
   
       await dispatch(saveOrder(products, totalPrice, user));
       dispatch(clearCart());

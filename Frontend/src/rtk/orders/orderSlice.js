@@ -15,7 +15,6 @@ import { createSlice } from "@reduxjs/toolkit";
         },
 
         updateOrderHistory: (state,action) => {
-         
             state.orderHistory.push(action.payload);
             const plainObject = JSON.parse(JSON.stringify(state.orderHistory));
             saveOrderHistory(plainObject);

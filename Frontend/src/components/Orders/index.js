@@ -37,7 +37,7 @@ useEffect(() => {
                         navigator(`/orderDetails/${details.orderID}`);
                       }}>{details.orderID}</td>
                       <td>{details.totalNum}</td>
-                      <td>{details.totalPrice}</td>
+                      <td>{details.totalPrice}$</td>
                     </tr>
                   ))}
                 </tbody>
