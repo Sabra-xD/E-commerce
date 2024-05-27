@@ -28,6 +28,7 @@ export const fetchData = async (products) => {
 
 
   export const fetchSuccess = (sessionID, products, totalPrice, user) => async (dispatch) => {
+    console.log("Fetch sucess was called");
     
     try {
       const response = await fetch(`${baseURL}/success/${sessionID}`, {
@@ -39,7 +40,7 @@ export const fetchData = async (products) => {
           products: products,
         }),
       });
-  
+      console.log("After the http request");
 
       if (!response.ok) {
         throw new Error('Network response was not ok');
@@ -47,7 +48,7 @@ export const fetchData = async (products) => {
   
       await dispatch(saveOrder(products, totalPrice, user));
       dispatch(clearCart());
-  
+      console.log("It is done");
     } catch (error) {
       console.log("Error when fetching success data: ", error);
     }

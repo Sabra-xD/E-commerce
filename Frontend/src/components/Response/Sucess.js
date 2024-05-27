@@ -18,8 +18,10 @@ const Sucess = () => {
   const [loading, isLoading] = useState(true);
 
   useEffect(() => {
+    console.log("The products length and totalPrice: ",products.length,totalPrice);
     if (products.length > 0 && totalPrice > 0) {
       const sucessFunction = async () => {
+        console.log("Calling the fetchSucess from useEffect");
         await dispatch(fetchSuccess(sessionID, products, totalPrice, user));
         isLoading(false);
       };
