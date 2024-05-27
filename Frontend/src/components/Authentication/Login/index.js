@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import FormInput from "../../Form/FormInput";
 import Button from "../../Form/Button";
+import PasswordInput from "../../Form/PasswordInput";
 
 const Login = () => {
 
@@ -66,9 +67,13 @@ const Login = () => {
             <FormInput  label="Email" placeholder="Email" onChange={(e)=>{
                 handleInputChange(e,true);
             }}/>
-            <FormInput  label="Password" placeholder="Password" onChange={(e)=>{
+ 
+            <PasswordInput  label="Password" placeholder="Password"  onChange={(e)=>{
                 handleInputChange(e,false);
             }}/>
+
+
+
 
             <Button  onClick={(e)=>{
                 handleSubmit(e);
@@ -79,7 +84,9 @@ const Login = () => {
             <Button  onClick={handleSignInWithGoogle}>Sign In With Google</Button>
 
 
-            <Link className="link-top" to="/reset-password">Forgot your password? Reset</Link>
+            <Link style={{ color: "black", marginTop:"10px"}} to="/reset-password">
+            Forgot your password? <span style={{ color: "darkblue", textDecoration: "underline" }}>Reset</span>
+            </Link>
 
             
             {
