@@ -39,11 +39,9 @@ const Login = () => {
     const handleSignInWithGoogle = async()=>{
         await dispatch(signInWithGoogle);
         navigator("/");
-        // ToDO: Naviagte to home page once done.
     }
 
     const handleSubmit = async (e)=>{
-        console.log("The password is: ",password);
         e.preventDefault();
          dispatch(signInWithEmailAndPasswordController({email,password}));
     }
