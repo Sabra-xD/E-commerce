@@ -16,10 +16,12 @@ const Sucess = () => {
   const user = useSelector(selectCurrentUser);
   const dispatch = useDispatch();
   const [loading, isLoading] = useState(true);
+  const [firstLoad,setFirstLoad] = useState(true);
 
   useEffect(() => {
     console.log("The products length and totalPrice: ",products.length,totalPrice);
-    if (products.length > 0 && totalPrice > 0) {
+    if (products.length > 0 && firstLoad) {
+      setFirstLoad()
       const sucessFunction = async () => {
         console.log("Calling the fetchSucess from useEffect");
         await dispatch(fetchSuccess(sessionID, products, totalPrice, user));
@@ -29,7 +31,7 @@ const Sucess = () => {
       sucessFunction();
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [products]);
   
   return (
     loading ? <LoadingSpinner /> :
