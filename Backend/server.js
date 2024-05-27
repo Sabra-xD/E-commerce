@@ -81,6 +81,7 @@
   
   // Route to handle successful payment
 app.post("/success/:session_id", async (req, res) => {
+  console.log("sucess was called ");
   try {
     const { session_id } = req.params;
     
@@ -90,7 +91,7 @@ app.post("/success/:session_id", async (req, res) => {
       // Access the order, send its documentIDs and delete them.
       const productIds = req.body.products.map(item => item.documentID);
       await deleteDocuments(productIds);
-
+      console.log("It is done");
       return res.status(200).json({ message: 'Payment successful and products deleted' });
     } else {
       return res.status(400).json({ error: 'Payment not completed successfully' });
