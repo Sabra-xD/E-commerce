@@ -43,6 +43,7 @@ const Login = () => {
     }
 
     const handleSubmit = async (e)=>{
+        console.log("The password is: ",password);
         e.preventDefault();
          dispatch(signInWithEmailAndPasswordController({email,password}));
     }
